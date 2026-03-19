@@ -1,0 +1,72 @@
+package com.org.careerbuilder.controller;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.org.careerbuilder.models.Student;
+import com.org.careerbuilder.service.StudentService;
+
+@Slf4j
+@RestController
+@RequestMapping("/api/students")
+public class StudentController {
+
+
+    private final StudentService service;
+
+    public StudentController(StudentService service) {
+        this.service = service;
+    }
+
+    @PostMapping
+    public Student create(@Valid @RequestBody Student student) {
+        log.info("Creating new student: {}", student.getFirstName());
+        return service.create(student);
+    }
+
+    @GetMapping
+    public Page<Student> getAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy
+    ) {
+
+        log.info("Fetching students → page={}, size={}, sortBy={}", page, size, sortBy);
+        return service.getAll(PageRequest.of(page, size, Sort.by(sortBy).ascending()));
+    }
+
+    @GetMapping("/{id}")
+    public Student getById(@PathVariable Long id) {
+    	  log.info("Fetching student by ID: {}", id);
+        return service.getById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Student update(
+            @PathVariable Long id,
+            @Valid @RequestBody Student student
+    ) {
+    	log.info("Updating student ID: {}", id);
+        return service.update(id, student);
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable Long id) {
+    	 log.warn("Deleting student with ID: {}", id);
+        service.delete(id);
+        return "Student deleted successfully";
+    }
+}
