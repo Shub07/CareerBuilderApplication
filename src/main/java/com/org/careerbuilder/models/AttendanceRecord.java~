@@ -1,0 +1,6 @@
+package com.org.careerbuilder.models;
+
+public class AttendanceRecord {
+
+    
+}

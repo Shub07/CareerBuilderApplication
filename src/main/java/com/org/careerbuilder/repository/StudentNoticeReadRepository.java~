@@ -1,0 +1,4 @@
+package com.org.careerbuilder.repository;
+
+public interface StudentNoticeReadRepository {
+}

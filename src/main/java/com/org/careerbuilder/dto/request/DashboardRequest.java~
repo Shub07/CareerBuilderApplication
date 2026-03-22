@@ -1,0 +1,5 @@
+package com.org.careerbuilder.dto.dashboard;
+
+public record DashboardRequest() {
+    
+}
