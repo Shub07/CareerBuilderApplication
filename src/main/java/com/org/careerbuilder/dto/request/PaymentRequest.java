@@ -1,0 +1,8 @@
+package com.org.careerbuilder.dto.request;
+
+public record PaymentRequest(
+        Long feeId,
+        Double amount,
+        String paymentMode
+) {
+}
