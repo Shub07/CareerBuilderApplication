@@ -26,14 +26,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Allow auth endpoints (login/signup) without token
-                        .requestMatchers("/api/auth/**").permitAll()
-
-                        // Student dashboard requires authenticated student role
-                        .requestMatchers("/api/student/dashboard/**").hasRole("STUDENT")
-
-                        // Everything else requires authentication
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
                 .build();

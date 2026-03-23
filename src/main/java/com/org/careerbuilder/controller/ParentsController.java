@@ -2,6 +2,8 @@ package com.org.careerbuilder.controller;
 import com.org.careerbuilder.models.Parent;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import com.org.careerbuilder.service.ParentService;
@@ -12,7 +14,7 @@ import com.org.careerbuilder.service.ParentService;
 @RequestMapping("/api/parents")
 public class ParentsController {
 
-//	private static final Logger log = LoggerFactory.getLogger(ParentsController.class);
+	private static final Logger log = LoggerFactory.getLogger(ParentsController.class);
 
     private final ParentService service;
 

@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 )
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class StudyMaterial {
 
@@ -55,4 +55,29 @@ public class StudyMaterial {
     @NotBlank
     @Column(name = "file_path", nullable = false, length = 500)
     private String filePath;
+
+    // Explicit getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    
+    public Subject getSubject() { return subject; }
+    public void setSubject(Subject subject) { this.subject = subject; }
+    
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+    
+    public MaterialType getMaterialType() { return materialType; }
+    public void setMaterialType(MaterialType materialType) { this.materialType = materialType; }
+    
+    public Integer getPages() { return pages; }
+    public void setPages(Integer pages) { this.pages = pages; }
+    
+    public String getUploadedBy() { return uploadedBy; }
+    public void setUploadedBy(String uploadedBy) { this.uploadedBy = uploadedBy; }
+    
+    public LocalDateTime getUploadedAt() { return uploadedAt; }
+    public void setUploadedAt(LocalDateTime uploadedAt) { this.uploadedAt = uploadedAt; }
+    
+    public String getFilePath() { return filePath; }
+    public void setFilePath(String filePath) { this.filePath = filePath; }
 }

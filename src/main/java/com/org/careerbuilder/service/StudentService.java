@@ -48,8 +48,8 @@ public class StudentService {
         existing.setPhone(updated.getPhone());
         existing.setEmail(updated.getEmail());
         existing.setAddress(updated.getAddress());
-        existing.setSchoolId(updated.getSchoolId());
-        existing.setSchoolName(updated.getSchoolName());
+        existing.setSchool(updated.getSchool());
+        existing.setSection(updated.getSection());
 
         return repo.save(existing);
     }

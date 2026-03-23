@@ -19,8 +19,8 @@ import lombok.*;
 )
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @ToString(exclude = {"school", "subject"})
 public class Faculty {
@@ -106,4 +106,44 @@ public class Faculty {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "school_id", nullable = false)
 	private School school;
+
+	// Explicit getters and setters
+	public Long getId() { return id; }
+	public void setId(Long id) { this.id = id; }
+	
+	public String getFacultyId() { return facultyId; }
+	public void setFacultyId(String facultyId) { this.facultyId = facultyId; }
+	
+	public String getFirstName() { return firstName; }
+	public void setFirstName(String firstName) { this.firstName = firstName; }
+	
+	public String getLastName() { return lastName; }
+	public void setLastName(String lastName) { this.lastName = lastName; }
+	
+	public String getGender() { return gender; }
+	public void setGender(String gender) { this.gender = gender; }
+	
+	public Integer getAge() { return age; }
+	public void setAge(Integer age) { this.age = age; }
+	
+	public Subject getSubject() { return subject; }
+	public void setSubject(Subject subject) { this.subject = subject; }
+	
+	public String getQualification() { return qualification; }
+	public void setQualification(String qualification) { this.qualification = qualification; }
+	
+	public Integer getExperience() { return experience; }
+	public void setExperience(Integer experience) { this.experience = experience; }
+	
+	public String getPhone() { return phone; }
+	public void setPhone(String phone) { this.phone = phone; }
+	
+	public String getEmail() { return email; }
+	public void setEmail(String email) { this.email = email; }
+	
+	public String getAddress() { return address; }
+	public void setAddress(String address) { this.address = address; }
+	
+	public School getSchool() { return school; }
+	public void setSchool(School school) { this.school = school; }
 }

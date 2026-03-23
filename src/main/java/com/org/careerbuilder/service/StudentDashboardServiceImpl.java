@@ -5,6 +5,7 @@ import com.org.careerbuilder.models.ClassSession;
 import com.org.careerbuilder.models.Notice;
 import com.org.careerbuilder.models.Student;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
+@Primary
 @RequiredArgsConstructor
 public class StudentDashboardServiceImpl implements StudentDashboardService {
 
@@ -52,8 +54,8 @@ public class StudentDashboardServiceImpl implements StudentDashboardService {
                 ))
                 .toList();
 
-        List<Notice> recentNotices = noticeService.getRecentNotices(student.getSchoolId());
-        int noticesTotal = noticeService.getTotalNoticeCount(student.getSchoolId());
+        List<Notice> recentNotices = noticeService.getRecentNotices(student.getSchool().getId());
+        int noticesTotal = noticeService.getTotalNoticeCount(student.getSchool().getId());
         int noticesUnread = noticeService.getUnreadNoticeCount(studentId, recentNotices);
 
         List<DashboardResponse.NoticeItem> noticeItems = recentNotices.stream()

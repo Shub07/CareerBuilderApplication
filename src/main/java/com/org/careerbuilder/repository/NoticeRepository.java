@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface NoticeRepository extends JpaRepository<Notice, Long> {
 
-    List<Notice> findTop10BySchoolIdOrderByCreatedAtDesc(String schoolId);
+    List<Notice> findTop10BySchoolIdOrderByCreatedAtDesc(Long schoolId);
 
-    long countBySchoolId(String schoolId);
+    long countBySchoolId(Long schoolId);
 }

@@ -19,8 +19,8 @@ import lombok.*;
 )
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Student {
 
@@ -71,11 +71,49 @@ public class Student {
 	@Column(name = "address", nullable = false, length = 300)
 	private String address;
 
-	@NotBlank @Size(max = 50)
-	@Column(name = "school_id", nullable = false, length = 50)
-	private String schoolId;
+	/**
+	 * Link student to School entity instead of storing schoolId/schoolName as Strings.
+	 * This prevents data inconsistency and supports proper foreign key relationships.
+	 */
+	@NotNull(message = "School is required")
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "school_id", nullable = false)
+	private School school;
 
-	@NotBlank @Size(max = 150)
-	@Column(name = "school_name", nullable = false, length = 150)
-	private String schoolName;
+	// Explicit getters and setters
+	public Long getId() { return id; }
+	public void setId(Long id) { this.id = id; }
+	
+	public String getFirstName() { return firstName; }
+	public void setFirstName(String firstName) { this.firstName = firstName; }
+	
+	public String getLastName() { return lastName; }
+	public void setLastName(String lastName) { this.lastName = lastName; }
+	
+	public Integer getAge() { return age; }
+	public void setAge(Integer age) { this.age = age; }
+	
+	public String getClassName() { return className; }
+	public void setClassName(String className) { this.className = className; }
+	
+	public String getSection() { return section; }
+	public void setSection(String section) { this.section = section; }
+	
+	public Integer getRollNo() { return rollNo; }
+	public void setRollNo(Integer rollNo) { this.rollNo = rollNo; }
+	
+	public String getParentName() { return parentName; }
+	public void setParentName(String parentName) { this.parentName = parentName; }
+	
+	public String getPhone() { return phone; }
+	public void setPhone(String phone) { this.phone = phone; }
+	
+	public String getEmail() { return email; }
+	public void setEmail(String email) { this.email = email; }
+	
+	public String getAddress() { return address; }
+	public void setAddress(String address) { this.address = address; }
+	
+	public School getSchool() { return school; }
+	public void setSchool(School school) { this.school = school; }
 }

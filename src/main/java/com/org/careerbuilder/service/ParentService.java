@@ -4,6 +4,8 @@ import com.org.careerbuilder.models.Parent;
 
 import com.org.careerbuilder.repository.ParentRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ParentService {
 
-    //	private static final Logger log = LoggerFactory.getLogger(FacultyService.class);
+    private static final Logger log = LoggerFactory.getLogger(ParentService.class);
     private final ParentRepository repo;
 
     public ParentService(ParentRepository repo) {
@@ -50,9 +52,10 @@ public class ParentService {
     public Parent update(Long id, Parent updated) {
         log.info("Updating parent id={}", id);
         Parent existing = getById(id);
-        existing.setParentId(updated.getParentId());
-        existing.setStudentId(updated.getStudentId());
-        existing.setSchoolId(updated.getSchoolId());
+        // Note: parentId (id field) should not be updated as it's the primary key
+        // Note: studentId and schoolId are relationships, use setStudent() and setSchool() instead
+        existing.setStudent(updated.getStudent());
+        existing.setSchool(updated.getSchool());
         existing.setFatherName(updated.getFatherName());
         existing.setMotherName(updated.getMotherName());
         existing.setPrimaryContact(updated.getPrimaryContact());

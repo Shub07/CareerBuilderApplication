@@ -17,12 +17,12 @@ public class NoticeServiceImpl implements NoticeService {
     private final StudentNoticeReadRepository studentNoticeReadRepository;
 
     @Override
-    public List<Notice> getRecentNotices(String schoolId) {
+    public List<Notice> getRecentNotices(Long schoolId) {
         return noticeRepository.findTop10BySchoolIdOrderByCreatedAtDesc(schoolId);
     }
 
     @Override
-    public int getTotalNoticeCount(String schoolId) {
+    public int getTotalNoticeCount(Long schoolId) {
         return (int) noticeRepository.countBySchoolId(schoolId);
     }
 

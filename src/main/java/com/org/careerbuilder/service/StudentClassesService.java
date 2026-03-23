@@ -18,7 +18,21 @@ public interface StudentClassesService {
 
     List<StudyMaterialCardResponse> getStudyMaterials(Long studentId, Long subjectId);
 
+    /**
+     * Get all teachers assigned to student's classes
+     * Can be filtered by subject
+     */
     List<TeacherCardResponse> getTeachers(Long studentId, Long subjectId);
 
-    void sendTeacherMessage(Long studentId, Long teacherId, TeacherMessageRequest request);
+    /**
+     * Get detailed profile information for a teacher
+     * Includes bio, qualifications, experience, office hours, contact info
+     */
+    TeacherProfileResponse getTeacherProfile(Long teacherId);
+
+    /**
+     * Send a message from student to teacher
+     * Creates message record and returns confirmation with metadata
+     */
+    TeacherMessageResponse sendTeacherMessage(Long studentId, Long teacherId, TeacherMessageRequest request);
 }

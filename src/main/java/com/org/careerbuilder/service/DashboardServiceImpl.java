@@ -56,8 +56,8 @@ public class DashboardServiceImpl implements StudentDashboardService {
                 .toList();
 
         // Notices
-        List<Notice> recentNotices = noticeService.getRecentNotices(student.getSchoolId());
-        int noticesTotal = noticeService.getTotalNoticeCount(student.getSchoolId());
+        List<Notice> recentNotices = noticeService.getRecentNotices(student.getSchool().getId());
+        int noticesTotal = noticeService.getTotalNoticeCount(student.getSchool().getId());
         int noticesUnread = noticeService.getUnreadNoticeCount(studentId, recentNotices);
 
         List<DashboardResponse.NoticeItem> noticeItems = recentNotices.stream()

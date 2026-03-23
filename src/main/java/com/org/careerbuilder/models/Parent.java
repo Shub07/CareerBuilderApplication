@@ -18,8 +18,8 @@ import lombok.*;
 )
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @ToString(exclude = {"student", "school"})
 public class Parent {
@@ -95,6 +95,46 @@ public class Parent {
 	@Size(min = 5, max = 300)
 	@Column(name = "address", nullable = false, length = 300)
 	private String address;
+
+	// Explicit getters and setters
+	public Long getId() { return id; }
+	public void setId(Long id) { this.id = id; }
+	
+	public String getParentCode() { return parentCode; }
+	public void setParentCode(String parentCode) { this.parentCode = parentCode; }
+	
+	public Student getStudent() { return student; }
+	public void setStudent(Student student) { this.student = student; }
+	
+	public School getSchool() { return school; }
+	public void setSchool(School school) { this.school = school; }
+	
+	public String getFatherName() { return fatherName; }
+	public void setFatherName(String fatherName) { this.fatherName = fatherName; }
+	
+	public String getMotherName() { return motherName; }
+	public void setMotherName(String motherName) { this.motherName = motherName; }
+	
+	public String getPrimaryContact() { return primaryContact; }
+	public void setPrimaryContact(String primaryContact) { this.primaryContact = primaryContact; }
+	
+	public String getSecondaryContact() { return secondaryContact; }
+	public void setSecondaryContact(String secondaryContact) { this.secondaryContact = secondaryContact; }
+	
+	public String getParentEmail() { return parentEmail; }
+	public void setParentEmail(String parentEmail) { this.parentEmail = parentEmail; }
+	
+	public String getFatherOccupation() { return fatherOccupation; }
+	public void setFatherOccupation(String fatherOccupation) { this.fatherOccupation = fatherOccupation; }
+	
+	public String getMotherOccupation() { return motherOccupation; }
+	public void setMotherOccupation(String motherOccupation) { this.motherOccupation = motherOccupation; }
+	
+	public Integer getAnnualIncome() { return annualIncome; }
+	public void setAnnualIncome(Integer annualIncome) { this.annualIncome = annualIncome; }
+	
+	public String getAddress() { return address; }
+	public void setAddress(String address) { this.address = address; }
 
 	public Object getStudentId() {
 		return student.getId();

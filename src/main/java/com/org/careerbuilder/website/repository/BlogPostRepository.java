@@ -21,7 +21,7 @@ public interface BlogPostRepository extends JpaRepository<BlogPost, Long> {
               and (:q is null or (
                     lower(p.title) like lower(concat('%', :q, '%'))
                  or lower(coalesce(p.summary, '')) like lower(concat('%', :q, '%'))
-                 or lower(coalesce(p.content, '')) like lower(concat('%', :q, '%'))
+                 or lower(cast(p.content as string)) like lower(concat('%', :q, '%'))
               ))
             order by p.createdAt desc
             """)

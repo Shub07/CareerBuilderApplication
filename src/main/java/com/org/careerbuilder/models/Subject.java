@@ -12,8 +12,8 @@ import lombok.*;
         }
 )
 @Getter @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Subject {
 
@@ -25,4 +25,11 @@ public class Subject {
     @NotBlank @Size(min = 2, max = 100)
     @Column(name = "subject_name", nullable = false, length = 100)
     private String name;
+
+    // Explicit getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 }

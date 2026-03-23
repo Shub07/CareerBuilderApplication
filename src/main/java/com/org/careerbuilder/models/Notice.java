@@ -2,6 +2,7 @@ package com.org.careerbuilder.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,8 +15,8 @@ import java.time.LocalDateTime;
         }
 )
 @Getter @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Notice {
 
@@ -24,9 +25,9 @@ public class Notice {
     @Column(name = "notice_id", nullable = false, updatable = false)
     private Long id;
 
-    @NotBlank
-    @Column(name = "school_id", nullable = false, length = 50)
-    private String schoolId;
+    @NotNull
+    @Column(name = "school_id", nullable = false)
+    private Long schoolId;
 
     @NotBlank
     @Column(name = "title", nullable = false, length = 200)
@@ -37,4 +38,20 @@ public class Notice {
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    // Explicit getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Long getSchoolId() { return schoolId; }
+    public void setSchoolId(Long schoolId) { this.schoolId = schoolId; }
+
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+
+    public String getBody() { return body; }
+    public void setBody(String body) { this.body = body; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

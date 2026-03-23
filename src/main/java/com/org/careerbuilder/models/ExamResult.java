@@ -21,8 +21,8 @@ import lombok.*;
         }
 )
 @Getter @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class ExamResult {
 
@@ -57,6 +57,28 @@ public class ExamResult {
     @Min(0) @Max(100)
     @Column(name = "delta_percent")
     private Integer deltaPercent;
+
+    // Explicit getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    
+    public Student getStudent() { return student; }
+    public void setStudent(Student student) { this.student = student; }
+    
+    public Exam getExam() { return exam; }
+    public void setExam(Exam exam) { this.exam = exam; }
+    
+    public Subject getSubject() { return subject; }
+    public void setSubject(Subject subject) { this.subject = subject; }
+    
+    public Integer getObtainedMarks() { return obtainedMarks; }
+    public void setObtainedMarks(Integer obtainedMarks) { this.obtainedMarks = obtainedMarks; }
+    
+    public Integer getTotalMarks() { return totalMarks; }
+    public void setTotalMarks(Integer totalMarks) { this.totalMarks = totalMarks; }
+    
+    public Integer getDeltaPercent() { return deltaPercent; }
+    public void setDeltaPercent(Integer deltaPercent) { this.deltaPercent = deltaPercent; }
 
     @Column(name = "grade", length = 5)
     private String grade;
