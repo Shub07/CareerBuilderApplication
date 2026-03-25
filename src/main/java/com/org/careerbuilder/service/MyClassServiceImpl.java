@@ -59,12 +59,42 @@ public class MyClassServiceImpl implements MyClassService {
 
     @Override
     public List<MyClass> getMyClassesForStudent(Long studentId, String className, String section) {
-        return myClassRepository.findByStudentIdAndClassNameAndSection(studentId, className, section);
+        log.info("Fetching MyClasses for Student ID: {} with className: {}, section: {}", 
+                studentId, className, section);
+        try {
+            List<MyClass> result = myClassRepository.findByStudentIdAndClassNameAndSection(studentId, className, section);
+            log.info("Found {} MyClasses", result.size());
+            return result;
+        } catch (Exception e) {
+            log.error("Error fetching MyClasses for student {}: {}", studentId, e.getMessage(), e);
+            throw new RuntimeException("Failed to fetch MyClasses for student " + studentId, e);
+        }
     }
 
     @Override
     public List<MyClass> getMyClassesForStudent(Long studentId) {
-        return myClassRepository.findByStudentId(studentId);
+        log.info("Fetching MyClasses for Student ID: {}", studentId);
+        try {
+            List<MyClass> result = myClassRepository.findByStudentId(studentId);
+            log.info("Found {} MyClasses for student {}", result.size(), studentId);
+            return result;
+        } catch (Exception e) {
+            log.error("Error fetching MyClasses for student {}: {}", studentId, e.getMessage(), e);
+            throw new RuntimeException("Failed to fetch MyClasses for student " + studentId, e);
+        }
+    }
+
+    @Override
+    public List<MyClass> getAllMyClasses() {
+        log.info("Fetching ALL MyClasses");
+        try {
+            List<MyClass> result = myClassRepository.findAll();
+            log.info("Found {} MyClasses in total", result.size());
+            return result;
+        } catch (Exception e) {
+            log.error("Error fetching all MyClasses: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to fetch all MyClasses", e);
+        }
     }
 
     @Override
@@ -94,11 +124,31 @@ public class MyClassServiceImpl implements MyClassService {
     @Override
     public void deleteMyClass(Long id) {
         log.info("Deleting MyClass with ID: {}", id);
-        if (!myClassRepository.existsById(id)) {
-            throw new ResourceNotFoundException("MyClass not found with id: " + id);
+        try {
+            if (!myClassRepository.existsById(id)) {
+                throw new ResourceNotFoundException("MyClass not found with id: " + id);
+            }
+            myClassRepository.deleteById(id);
+            log.info("MyClass with ID: {} deleted successfully", id);
+        } catch (Exception e) {
+            log.error("Error deleting MyClass {}: {}", id, e.getMessage(), e);
+            throw e;
         }
-        myClassRepository.deleteById(id);
-        log.info("MyClass with ID: {} deleted successfully", id);
     }
+
+    @Override
+    public void deleteAllMyClasses() {
+        log.warn("ADMIN ACTION: Deleting ALL MyClasses from database");
+        try {
+            long count = myClassRepository.count();
+            log.warn("Total MyClasses to delete: {}", count);
+            myClassRepository.deleteAll();
+            log.warn("All {} MyClasses deleted successfully", count);
+        } catch (Exception e) {
+            log.error("Error deleting all MyClasses: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to delete all MyClasses", e);
+        }
+    }
+
 }
 

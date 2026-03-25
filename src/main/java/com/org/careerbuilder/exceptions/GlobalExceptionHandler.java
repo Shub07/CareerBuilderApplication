@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 @RestControllerAdvice
@@ -34,6 +35,22 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Map<String, Object>> handleConstraint(DataIntegrityViolationException ex) {
+        String rawMessage = ex.getMostSpecificCause() != null
+            ? ex.getMostSpecificCause().getMessage()
+            : ex.getMessage();
+        String normalizedMessage = rawMessage == null ? "" : rawMessage.toLowerCase(Locale.ROOT);
+
+        if (normalizedMessage.contains("uk_myclass_student_subject") ||
+            (normalizedMessage.contains("my_classes") &&
+                normalizedMessage.contains("student_id") &&
+                normalizedMessage.contains("subject_id"))) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
+                "message", "This subject is already added for this student.",
+                "code", "MYCLASS_DUPLICATE_SUBJECT",
+                "detail", "Choose a different subject for this student or update the existing class entry."
+            ));
+        }
+
         return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
                 "message", "Duplicate or constraint violation",
                 "detail", "Check unique fields (email/phone/code)"

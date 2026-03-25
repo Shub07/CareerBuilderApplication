@@ -4,18 +4,20 @@ import com.org.careerbuilder.models.MyClass;
 import java.util.List;
 
 public interface MyClassService {
-    // Create
+    // ==================== CREATE ====================
     MyClass addMyClass(MyClass myClass);
     
-    // Read
-    List<MyClass> getMyClassesForStudent(Long studentId, String className, String section);
+    // ==================== READ ====================
+    List<MyClass> getAllMyClasses();
     List<MyClass> getMyClassesForStudent(Long studentId);
+    List<MyClass> getMyClassesForStudent(Long studentId, String className, String section);
     MyClass getMyClassById(Long id);
     
-    // Update
+    // ==================== UPDATE ====================
     MyClass updateMyClass(Long id, MyClass myClassData);
     
-    // Delete
+    // ==================== DELETE ====================
     void deleteMyClass(Long id);
+    void deleteAllMyClasses();
 }
 
