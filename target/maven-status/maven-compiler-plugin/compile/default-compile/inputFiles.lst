@@ -68,6 +68,7 @@ C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backe
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\service\AssignmentMetricsService.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\models\enums\AttendanceStatus.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\CareerBuilderApplication.java
+C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\service\StudentPerformanceReportService.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\service\AssignmentMetricsServiceImpl.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\website\service\BlogService.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\dto\dashboard\NoticeItem.java
@@ -99,6 +100,7 @@ C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backe
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\dto\dashboard\ExamSubjectScore.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\dto\request\AssignmentSubmitRequest.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\models\Exam.java
+C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\models\StudentPerformanceReport.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\website\models\PartnerRequest.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\models\Payment.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\models\RefreshToken.java
@@ -111,6 +113,7 @@ C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backe
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\service\ExamMetricsServiceImpl.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\website\repository\BlogPostRepository.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\repository\StudentNoticeReadRepository.java
+C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\models\IndividualTestScore.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\models\enums\UserRole.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\service\StudentService.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\website\models\BlogCategory.java
@@ -124,6 +127,7 @@ C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backe
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\website\controller\LeadsController.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\models\enums\LeaveStatus.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\service\DashboardServiceImpl.java
+C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\service\StudentPerformanceReportServiceImpl.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\website\dto\DemoRequestCreateDTO.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\website\service\CaseStudyService.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\website\models\NewsletterSubscriber.java
@@ -139,6 +143,7 @@ C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backe
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\security\UserPrincipal.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\service\ClassScheduleServiceImpl.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\repository\AssignmentRepository.java
+C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\repository\StudentPerformanceReportRepository.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\controller\StudentDashboardController.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\website\repository\DemoRequestRepository.java
 C:\Users\Admin\Downloads\career-builder-backend-public-apis\career-builder-backend-main\src\main\java\com\org\careerbuilder\controller\MyClassController.java

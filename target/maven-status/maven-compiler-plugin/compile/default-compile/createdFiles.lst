@@ -11,6 +11,7 @@ com\org\careerbuilder\dto\response\TeacherProfileResponse.class
 com\org\careerbuilder\dto\response\AssignmentSubmissionResponse.class
 com\org\careerbuilder\models\Faculty$FacultyBuilder.class
 com\org\careerbuilder\repository\SchoolRepository.class
+com\org\careerbuilder\models\StudentPerformanceReport$StudentPerformanceReportBuilder.class
 com\org\careerbuilder\models\Student.class
 com\org\careerbuilder\models\StudentNoticeRead.class
 com\org\careerbuilder\repository\TeacherMessageRepository.class
@@ -34,6 +35,7 @@ com\org\careerbuilder\security\SecurityConfig.class
 com\org\careerbuilder\website\models\CaseStudy.class
 com\org\careerbuilder\dto\response\DashboardResponse$ScheduleItem.class
 com\org\careerbuilder\dto\response\TeacherProfileResponse$OfficeHoursDTO.class
+com\org\careerbuilder\models\IndividualTestScore$IndividualTestScoreBuilder.class
 com\org\careerbuilder\models\LeaveRequest$LeaveRequestBuilder.class
 com\org\careerbuilder\models\School$SchoolBuilder.class
 com\org\careerbuilder\controller\SchoolController.class
@@ -166,6 +168,7 @@ com\org\careerbuilder\models\Assignment$AssignmentBuilder.class
 com\org\careerbuilder\models\enums\SessionType.class
 com\org\careerbuilder\dto\dashboard\TodayScheduleItem.class
 com\org\careerbuilder\repository\FeeRepository.class
+com\org\careerbuilder\service\StudentPerformanceReportService.class
 com\org\careerbuilder\website\models\NewsletterSubscriber.class
 com\org\careerbuilder\models\MyClass.class
 com\org\careerbuilder\website\repository\NewsletterSubscriberRepository.class
@@ -175,6 +178,7 @@ com\org\careerbuilder\service\MyClassService.class
 com\org\careerbuilder\models\Fee$FeeBuilder.class
 com\org\careerbuilder\models\Notice.class
 com\org\careerbuilder\dto\response\DashboardResponse$Header.class
+com\org\careerbuilder\models\IndividualTestScore.class
 com\org\careerbuilder\website\models\NewsItem$NewsType.class
 com\org\careerbuilder\dto\response\StudentCalendarSlotResponse.class
 com\org\careerbuilder\config\CorsConfig.class
@@ -195,6 +199,7 @@ com\org\careerbuilder\models\enums\ExamType.class
 com\org\careerbuilder\models\enums\ClassJoinStatus.class
 com\org\careerbuilder\controller\WelcomeController.class
 com\org\careerbuilder\models\School.class
+com\org\careerbuilder\models\StudentPerformanceReport.class
 com\org\careerbuilder\dto\dashboard\RecentExamScore.class
 com\org\careerbuilder\controller\MyClassController.class
 com\org\careerbuilder\repository\FacultyRepository.class

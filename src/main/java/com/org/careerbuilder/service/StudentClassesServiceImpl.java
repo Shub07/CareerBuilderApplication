@@ -6,6 +6,7 @@ import com.org.careerbuilder.exceptions.ResourceNotFoundException;
 import com.org.careerbuilder.models.Faculty;
 import com.org.careerbuilder.models.StudyMaterial;
 import com.org.careerbuilder.repository.FacultyRepository;
+import com.org.careerbuilder.repository.MyClassRepository;
 import com.org.careerbuilder.repository.StudentRepository;
 import com.org.careerbuilder.repository.StudyMaterialRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class StudentClassesServiceImpl implements StudentClassesService {
     private final StudyMaterialRepository studyMaterialRepository;
     private final StudentRepository studentRepository;
     private final FacultyRepository facultyRepository;
+    private final MyClassRepository myClassRepository;
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd MMM yyyy");
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("hh:mm a");
@@ -48,8 +50,20 @@ public class StudentClassesServiceImpl implements StudentClassesService {
 
     @Override
     public List<StudentClassCardResponse> getSubjects(Long studentId) {
-        // ...existing code...
-        return Collections.emptyList();
+        List<Object[]> rows = myClassRepository.findSubjectCardsByStudentId(studentId);
+
+        return rows.stream()
+            .map(row -> new StudentClassCardResponse(
+                row[0] != null ? ((Number) row[0]).longValue() : null,
+                row[1] != null ? String.valueOf(row[1]) : "Unknown Subject",
+                row[3] != null ? "Section " + row[3] : "Section not available",
+                "Not assigned",
+                "Time not scheduled",
+                null,
+                0,
+                "JOIN"
+            ))
+            .toList();
     }
 
     @Override

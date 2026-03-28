@@ -22,7 +22,7 @@ public interface ExamResultRepository extends JpaRepository<ExamResult, Long> {
     """)
     List<Object[]> getSubjectPerformance(
             @Param("studentId") Long studentId,
-            @Param("examType") String examType
+            @Param("examType") com.org.careerbuilder.models.enums.ExamType examType
     );
 
     // 🔥 Average score
@@ -33,16 +33,17 @@ public interface ExamResultRepository extends JpaRepository<ExamResult, Long> {
     """)
     Double getAverageScore(@Param("studentId") Long studentId);
 
-    // 🔥 Detailed results (FIXED)
+    // 🔥 Detailed results with exam type filter
     @Query("""
         SELECT er
         FROM ExamResult er
         WHERE er.student.id = :studentId
         AND (:examType IS NULL OR er.exam.examType = :examType)
+        ORDER BY er.exam.examDate DESC
     """)
     List<ExamResult> findDetailedResults(
             @Param("studentId") Long studentId,
-            @Param("examType") String examType
+            @Param("examType") com.org.careerbuilder.models.enums.ExamType examType
     );
 
     @Query("""

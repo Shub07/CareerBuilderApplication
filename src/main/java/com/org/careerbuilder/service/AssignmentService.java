@@ -1,6 +1,7 @@
 package com.org.careerbuilder.service;
 
 import com.org.careerbuilder.dto.response.*;
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -14,10 +15,16 @@ public interface AssignmentService {
             Long assignmentId,
             Long studentId,
             MultipartFile file,
-            String comments
+            String comments,
+            boolean allowLate
     );
 
     AssignmentSubmissionResponse getSubmission(
+            Long assignmentId,
+            Long studentId
+    );
+
+    Resource downloadSubmissionFile(
             Long assignmentId,
             Long studentId
     );
