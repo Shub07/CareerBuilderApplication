@@ -65,5 +65,34 @@ public interface ExamResultRepository extends JpaRepository<ExamResult, Long> {
     // ✅ View Result Button
     Optional<ExamResult> findByExam_IdAndStudent_Id(Long examId, Long studentId);
 
+    // ✅ UPCOMING EXAMS (For Upcoming Tab)
+    @Query("""
+        SELECT er FROM ExamResult er
+        WHERE er.student.id = :studentId
+        AND er.exam.examDate >= CURRENT_DATE
+        ORDER BY er.exam.examDate ASC
+    """)
+    List<ExamResult> findUpcomingExams(@Param("studentId") Long studentId);
 
+    // ✅ PERFORMANCE COMPARISON (Class Average, Highest Score, Rank)
+    @Query("""
+        SELECT 
+            CAST(AVG(er.obtainedMarks * 1.0 / er.totalMarks * 100) AS Double) as classAvg,
+            MAX(er.obtainedMarks * 1.0 / er.totalMarks * 100) as highestScore
+        FROM ExamResult er
+        WHERE er.exam.id = :examId
+    """)
+    Object[] getExamPerformanceStats(@Param("examId") Long examId);
+
+    // ✅ Student rank for an exam
+    @Query("""
+        SELECT COUNT(*) 
+        FROM ExamResult er
+        WHERE er.exam.id = :examId
+        AND (er.obtainedMarks * 1.0 / er.totalMarks * 100) > 
+            (SELECT er2.obtainedMarks * 1.0 / er2.totalMarks * 100
+             FROM ExamResult er2
+             WHERE er2.id = :examResultId)
+    """)
+    Long getStudentRank(@Param("examResultId") Long examResultId, @Param("examId") Long examId);
 }

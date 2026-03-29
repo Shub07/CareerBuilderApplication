@@ -1,0 +1,128 @@
+{
+  "info": {
+    "_postman_id": "exams-tests-api",
+    "name": "Career Builder - Exams & Tests API",
+    "description": "Complete API collection for testing Exams & Tests endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "1"
+  },
+  "item": [
+    {
+      "name": "Upcoming Exams",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:9092/api/student/exams/upcoming?studentId=1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9092",
+          "path": ["api", "student", "exams", "upcoming"],
+          "query": [
+            {
+              "key": "studentId",
+              "value": "1"
+            }
+          ]
+        },
+        "description": "Get all upcoming exams for a student"
+      },
+      "response": []
+    },
+    {
+      "name": "Completed Exams",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:9092/api/student/exams/completed?studentId=1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9092",
+          "path": ["api", "student", "exams", "completed"],
+          "query": [
+            {
+              "key": "studentId",
+              "value": "1"
+            }
+          ]
+        },
+        "description": "Get all completed exams for a student"
+      },
+      "response": []
+    },
+    {
+      "name": "Exam Result Detail (Full View)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:9092/api/student/exams/result/1?studentId=1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9092",
+          "path": ["api", "student", "exams", "result", "1"],
+          "query": [
+            {
+              "key": "studentId",
+              "value": "1"
+            }
+          ]
+        },
+        "description": "Get detailed exam result with marks breakdown, performance insights, teacher feedback, and question-wise analysis"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:9092",
+      "type": "string"
+    },
+    {
+      "key": "student_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "exam_result_id",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}
+

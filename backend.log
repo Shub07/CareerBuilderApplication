@@ -293,3 +293,897 @@ Hibernate:
         exam_results er1_0 
     where
         er1_0.student_id=?
+Hibernate: 
+    select
+        s1_0.subject_name,
+        sum(er1_0.obtained_marks),
+        sum(er1_0.total_marks) 
+    from
+        exam_results er1_0 
+    join
+        subjects s1_0 
+            on s1_0.subject_id=er1_0.subject_id 
+    join
+        exams e1_0 
+            on e1_0.exam_id=er1_0.exam_id 
+    where
+        er1_0.student_id=? 
+        and (
+            ? is null 
+            or e1_0.exam_type=?
+        ) 
+    group by
+        s1_0.subject_name
+Hibernate: 
+    select
+        er1_0.result_id,
+        er1_0.delta_percent,
+        er1_0.exam_id,
+        er1_0.feedback,
+        er1_0.grade,
+        er1_0.obtained_marks,
+        er1_0.rank,
+        er1_0.student_id,
+        er1_0.subject_id,
+        er1_0.total_marks 
+    from
+        exam_results er1_0 
+    join
+        exams e1_0 
+            on e1_0.exam_id=er1_0.exam_id 
+    where
+        er1_0.student_id=? 
+        and (
+            ? is null 
+            or e1_0.exam_type=?
+        ) 
+    order by
+        e1_0.exam_date desc
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        avg((((er1_0.obtained_marks*1.0)/er1_0.total_marks)*100)) 
+    from
+        exam_results er1_0 
+    where
+        er1_0.student_id=?
+Hibernate: 
+    select
+        s1_0.subject_name,
+        sum(er1_0.obtained_marks),
+        sum(er1_0.total_marks) 
+    from
+        exam_results er1_0 
+    join
+        subjects s1_0 
+            on s1_0.subject_id=er1_0.subject_id 
+    join
+        exams e1_0 
+            on e1_0.exam_id=er1_0.exam_id 
+    where
+        er1_0.student_id=? 
+        and (
+            ? is null 
+            or e1_0.exam_type=?
+        ) 
+    group by
+        s1_0.subject_name
+Hibernate: 
+    select
+        er1_0.result_id,
+        er1_0.delta_percent,
+        er1_0.exam_id,
+        er1_0.feedback,
+        er1_0.grade,
+        er1_0.obtained_marks,
+        er1_0.rank,
+        er1_0.student_id,
+        er1_0.subject_id,
+        er1_0.total_marks 
+    from
+        exam_results er1_0 
+    join
+        exams e1_0 
+            on e1_0.exam_id=er1_0.exam_id 
+    where
+        er1_0.student_id=? 
+        and (
+            ? is null 
+            or e1_0.exam_type=?
+        ) 
+    order by
+        e1_0.exam_date desc
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        avg((((er1_0.obtained_marks*1.0)/er1_0.total_marks)*100)) 
+    from
+        exam_results er1_0 
+    where
+        er1_0.student_id=?
+Hibernate: 
+    select
+        s1_0.subject_name,
+        sum(er1_0.obtained_marks),
+        sum(er1_0.total_marks) 
+    from
+        exam_results er1_0 
+    join
+        subjects s1_0 
+            on s1_0.subject_id=er1_0.subject_id 
+    join
+        exams e1_0 
+            on e1_0.exam_id=er1_0.exam_id 
+    where
+        er1_0.student_id=? 
+        and (
+            ? is null 
+            or e1_0.exam_type=?
+        ) 
+    group by
+        s1_0.subject_name
+Hibernate: 
+    select
+        er1_0.result_id,
+        er1_0.delta_percent,
+        er1_0.exam_id,
+        er1_0.feedback,
+        er1_0.grade,
+        er1_0.obtained_marks,
+        er1_0.rank,
+        er1_0.student_id,
+        er1_0.subject_id,
+        er1_0.total_marks 
+    from
+        exam_results er1_0 
+    join
+        exams e1_0 
+            on e1_0.exam_id=er1_0.exam_id 
+    where
+        er1_0.student_id=? 
+        and (
+            ? is null 
+            or e1_0.exam_type=?
+        ) 
+    order by
+        e1_0.exam_date desc
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        avg((((er1_0.obtained_marks*1.0)/er1_0.total_marks)*100)) 
+    from
+        exam_results er1_0 
+    where
+        er1_0.student_id=?
+Hibernate: 
+    select
+        s1_0.subject_name,
+        sum(er1_0.obtained_marks),
+        sum(er1_0.total_marks) 
+    from
+        exam_results er1_0 
+    join
+        subjects s1_0 
+            on s1_0.subject_id=er1_0.subject_id 
+    join
+        exams e1_0 
+            on e1_0.exam_id=er1_0.exam_id 
+    where
+        er1_0.student_id=? 
+        and (
+            ? is null 
+            or e1_0.exam_type=?
+        ) 
+    group by
+        s1_0.subject_name
+Hibernate: 
+    select
+        er1_0.result_id,
+        er1_0.delta_percent,
+        er1_0.exam_id,
+        er1_0.feedback,
+        er1_0.grade,
+        er1_0.obtained_marks,
+        er1_0.rank,
+        er1_0.student_id,
+        er1_0.subject_id,
+        er1_0.total_marks 
+    from
+        exam_results er1_0 
+    join
+        exams e1_0 
+            on e1_0.exam_id=er1_0.exam_id 
+    where
+        er1_0.student_id=? 
+        and (
+            ? is null 
+            or e1_0.exam_type=?
+        ) 
+    order by
+        e1_0.exam_date desc
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        avg((((er1_0.obtained_marks*1.0)/er1_0.total_marks)*100)) 
+    from
+        exam_results er1_0 
+    where
+        er1_0.student_id=?
+Hibernate: 
+    select
+        s1_0.subject_name,
+        sum(er1_0.obtained_marks),
+        sum(er1_0.total_marks) 
+    from
+        exam_results er1_0 
+    join
+        subjects s1_0 
+            on s1_0.subject_id=er1_0.subject_id 
+    join
+        exams e1_0 
+            on e1_0.exam_id=er1_0.exam_id 
+    where
+        er1_0.student_id=? 
+        and (
+            ? is null 
+            or e1_0.exam_type=?
+        ) 
+    group by
+        s1_0.subject_name
+Hibernate: 
+    select
+        er1_0.result_id,
+        er1_0.delta_percent,
+        er1_0.exam_id,
+        er1_0.feedback,
+        er1_0.grade,
+        er1_0.obtained_marks,
+        er1_0.rank,
+        er1_0.student_id,
+        er1_0.subject_id,
+        er1_0.total_marks 
+    from
+        exam_results er1_0 
+    join
+        exams e1_0 
+            on e1_0.exam_id=er1_0.exam_id 
+    where
+        er1_0.student_id=? 
+        and (
+            ? is null 
+            or e1_0.exam_type=?
+        ) 
+    order by
+        e1_0.exam_date desc
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        s1_0.subject_id,
+        s1_0.subject_name 
+    from
+        subjects s1_0 
+    where
+        s1_0.subject_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        e1_0.exam_id,
+        e1_0.duration_minutes,
+        e1_0.exam_date,
+        e1_0.exam_type,
+        e1_0.exam_name,
+        e1_0.start_time,
+        e1_0.subject_id 
+    from
+        exams e1_0 
+    where
+        e1_0.exam_id=?
+Hibernate: 
+    select
+        avg((((er1_0.obtained_marks*1.0)/er1_0.total_marks)*100)) 
+    from
+        exam_results er1_0 
+    where
+        er1_0.student_id=?
+2026-03-28T23:37:29.640+05:30  WARN 21976 --- [career-builder] [l-1:housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=23m9s424ms809µs100ns).
