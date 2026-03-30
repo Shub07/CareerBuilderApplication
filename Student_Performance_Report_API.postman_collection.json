@@ -1,0 +1,218 @@
+{
+  "info": {
+    "name": "Student Performance Report API",
+    "description": "Complete API testing collection for Performance Report endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Create Performance Report",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentId\": 1,\n  \"subjectId\": 1,\n  \"examId\": 1,\n  \"marksObtained\": 95,\n  \"totalMarks\": 100,\n  \"percentage\": 95.0,\n  \"grade\": \"A\",\n  \"examDate\": \"2025-03-20\",\n  \"reportDate\": \"2025-03-21\",\n  \"academicYear\": 2025,\n  \"remarks\": \"Outstanding performance in Mathematics\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:9091/api/student-performance",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9091",
+          "path": ["api", "student-performance"]
+        }
+      }
+    },
+    {
+      "name": "2. Get All Reports",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9091/api/student-performance/all",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9091",
+          "path": ["api", "student-performance", "all"]
+        }
+      }
+    },
+    {
+      "name": "3. Get Student Reports (ID: 1)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9091/api/student-performance/student/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9091",
+          "path": ["api", "student-performance", "student", "1"]
+        }
+      }
+    },
+    {
+      "name": "4. Get Filtered Reports",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9091/api/student-performance/filter?studentId=1&academicYear=2025&subjectId=1&examId=1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9091",
+          "path": ["api", "student-performance", "filter"],
+          "query": [
+            {"key": "studentId", "value": "1"},
+            {"key": "academicYear", "value": "2025"},
+            {"key": "subjectId", "value": "1"},
+            {"key": "examId", "value": "1"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "5. Get Report by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9091/api/student-performance/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9091",
+          "path": ["api", "student-performance", "1"]
+        }
+      }
+    },
+    {
+      "name": "6. Get Overall Average",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9091/api/student-performance/analytics/overall-average?studentId=1&academicYear=2025",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9091",
+          "path": ["api", "student-performance", "analytics", "overall-average"],
+          "query": [
+            {"key": "studentId", "value": "1"},
+            {"key": "academicYear", "value": "2025"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "7. Get Subject Average",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9091/api/student-performance/analytics/subject-average?studentId=1&subjectId=1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9091",
+          "path": ["api", "student-performance", "analytics", "subject-average"],
+          "query": [
+            {"key": "studentId", "value": "1"},
+            {"key": "subjectId", "value": "1"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "8. Get Best Subject",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9091/api/student-performance/analytics/best-subject?studentId=1&academicYear=2025",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9091",
+          "path": ["api", "student-performance", "analytics", "best-subject"],
+          "query": [
+            {"key": "studentId", "value": "1"},
+            {"key": "academicYear", "value": "2025"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "9. Get Performance Trend",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9091/api/student-performance/analytics/trend?studentId=1&academicYear=2025",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9091",
+          "path": ["api", "student-performance", "analytics", "trend"],
+          "query": [
+            {"key": "studentId", "value": "1"},
+            {"key": "academicYear", "value": "2025"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "10. Update Report",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"marksObtained\": 96,\n  \"totalMarks\": 100,\n  \"percentage\": 96.0,\n  \"grade\": \"A\",\n  \"remarks\": \"Updated - Excellent performance maintained\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:9091/api/student-performance/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9091",
+          "path": ["api", "student-performance", "1"]
+        }
+      }
+    },
+    {
+      "name": "11. Delete Report",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9091/api/student-performance/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9091",
+          "path": ["api", "student-performance", "1"]
+        }
+      }
+    },
+    {
+      "name": "12. Delete Student Reports",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9091/api/student-performance/student/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9091",
+          "path": ["api", "student-performance", "student", "1"]
+        }
+      }
+    }
+  ]
+}
+

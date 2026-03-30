@@ -21,12 +21,24 @@ public class PerformanceReportServiceImpl implements PerformanceReportService {
     @Override
     public PerformanceReportResponse getPerformanceReport(Long studentId, String examType) {
 
+        // Convert examType String to ExamType enum if provided
+        com.org.careerbuilder.models.enums.ExamType examTypeEnum = null;
+        if (examType != null && !examType.isEmpty()) {
+            try {
+                // Validate and convert to enum
+                examTypeEnum = com.org.careerbuilder.models.enums.ExamType.valueOf(examType.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                // Invalid exam type, ignore and fetch all
+                examTypeEnum = null;
+            }
+        }
+
         // 🔥 Aggregated subject performance
-        List<Object[]> raw = repository.getSubjectPerformance(studentId, examType);
+        List<Object[]> raw = repository.getSubjectPerformance(studentId, examTypeEnum);
 
         // 🔥 Detailed grouping (subject → test list)
         Map<String, List<ExamResult>> detailedMap =
-                repository.findDetailedResults(studentId, examType)
+                repository.findDetailedResults(studentId, examTypeEnum)
                         .stream()
                         .collect(Collectors.groupingBy(er -> er.getSubject().getName()));
 

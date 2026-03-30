@@ -1,0 +1,195 @@
+{
+  "info": {
+    "_postman_id": "career-builder-performance-api",
+    "name": "Career Builder - Student Performance Report API",
+    "description": "Complete API collection for testing Student Performance Report endpoint",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "1"
+  },
+  "item": [
+    {
+      "name": "Performance Report - All Exams",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:9092/api/student/performance/report?studentId=1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9092",
+          "path": ["api", "student", "performance", "report"],
+          "query": [
+            {
+              "key": "studentId",
+              "value": "1"
+            }
+          ]
+        },
+        "description": "Get performance report for all exams combined"
+      },
+      "response": []
+    },
+    {
+      "name": "Performance Report - INTERNAL Filter",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:9092/api/student/performance/report?studentId=1&examType=INTERNAL",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9092",
+          "path": ["api", "student", "performance", "report"],
+          "query": [
+            {
+              "key": "studentId",
+              "value": "1"
+            },
+            {
+              "key": "examType",
+              "value": "INTERNAL"
+            }
+          ]
+        },
+        "description": "Get performance report for INTERNAL exams only"
+      },
+      "response": []
+    },
+    {
+      "name": "Performance Report - WEEKLY Filter",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:9092/api/student/performance/report?studentId=1&examType=WEEKLY",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9092",
+          "path": ["api", "student", "performance", "report"],
+          "query": [
+            {
+              "key": "studentId",
+              "value": "1"
+            },
+            {
+              "key": "examType",
+              "value": "WEEKLY"
+            }
+          ]
+        },
+        "description": "Get performance report for WEEKLY exams only"
+      },
+      "response": []
+    },
+    {
+      "name": "Performance Report - FINAL Filter",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:9092/api/student/performance/report?studentId=1&examType=FINAL",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9092",
+          "path": ["api", "student", "performance", "report"],
+          "query": [
+            {
+              "key": "studentId",
+              "value": "1"
+            },
+            {
+              "key": "examType",
+              "value": "FINAL"
+            }
+          ]
+        },
+        "description": "Get performance report for FINAL exams only"
+      },
+      "response": []
+    },
+    {
+      "name": "Performance Report - Default (No Params)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:9092/api/student/performance/report",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "9092",
+          "path": ["api", "student", "performance", "report"]
+        },
+        "description": "Get performance report with default studentId=1"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:9092",
+      "type": "string"
+    },
+    {
+      "key": "student_id",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}
+

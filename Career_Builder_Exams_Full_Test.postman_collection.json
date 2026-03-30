@@ -1,0 +1,448 @@
+{
+  "info": {
+    "_postman_id": "exams-tests-full-api",
+    "name": "Career Builder - Exams & Tests API (Complete)",
+    "description": "Full test collection with sample data for 3 students",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "1"
+  },
+  "item": [
+    {
+      "name": "Upcoming Exams",
+      "item": [
+        {
+          "name": "Student 1 (John Doe) - Upcoming",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:9092/api/student/exams/upcoming?studentId=1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9092",
+              "path": ["api", "student", "exams", "upcoming"],
+              "query": [
+                {
+                  "key": "studentId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get upcoming exams for John Doe (Student ID: 1) - Average performer"
+          },
+          "response": []
+        },
+        {
+          "name": "Student 2 (Jane Smith) - Upcoming",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:9092/api/student/exams/upcoming?studentId=2",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9092",
+              "path": ["api", "student", "exams", "upcoming"],
+              "query": [
+                {
+                  "key": "studentId",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "Get upcoming exams for Jane Smith (Student ID: 2) - High performer"
+          },
+          "response": []
+        },
+        {
+          "name": "Student 3 (Bob Wilson) - Upcoming",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:9092/api/student/exams/upcoming?studentId=3",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9092",
+              "path": ["api", "student", "exams", "upcoming"],
+              "query": [
+                {
+                  "key": "studentId",
+                  "value": "3"
+                }
+              ]
+            },
+            "description": "Get upcoming exams for Bob Wilson (Student ID: 3) - Lower performer"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Completed Exams",
+      "item": [
+        {
+          "name": "Student 1 (John Doe) - Completed",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:9092/api/student/exams/completed?studentId=1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9092",
+              "path": ["api", "student", "exams", "completed"],
+              "query": [
+                {
+                  "key": "studentId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get completed exams for John Doe - Expected: 2 exams (92/100 Grade A, 78/100 Grade B+)"
+          },
+          "response": []
+        },
+        {
+          "name": "Student 2 (Jane Smith) - Completed",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:9092/api/student/exams/completed?studentId=2",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9092",
+              "path": ["api", "student", "exams", "completed"],
+              "query": [
+                {
+                  "key": "studentId",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "Get completed exams for Jane Smith - Expected: 2 exams (95/100 Grade A, 82/100 Grade B)"
+          },
+          "response": []
+        },
+        {
+          "name": "Student 3 (Bob Wilson) - Completed",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:9092/api/student/exams/completed?studentId=3",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9092",
+              "path": ["api", "student", "exams", "completed"],
+              "query": [
+                {
+                  "key": "studentId",
+                  "value": "3"
+                }
+              ]
+            },
+            "description": "Get completed exams for Bob Wilson - Expected: 2 exams (80/100 Grade B, 72/100 Grade C)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exam Result Detail",
+      "item": [
+        {
+          "name": "Student 1 - Result 3 (High Score: 92/100)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:9092/api/student/exams/result/3?studentId=1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9092",
+              "path": ["api", "student", "exams", "result", "3"],
+              "query": [
+                {
+                  "key": "studentId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get full exam result detail - Monthly Test, Score 92/100, Grade A, Rank #5"
+          },
+          "response": []
+        },
+        {
+          "name": "Student 1 - Result 4 (Medium Score: 78/100)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:9092/api/student/exams/result/4?studentId=1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9092",
+              "path": ["api", "student", "exams", "result", "4"],
+              "query": [
+                {
+                  "key": "studentId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get full exam result detail - Weekly Assessment, Score 78/100, Grade B+, Rank #15"
+          },
+          "response": []
+        },
+        {
+          "name": "Student 2 - Result 5 (Highest Score: 95/100)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:9092/api/student/exams/result/5?studentId=2",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9092",
+              "path": ["api", "student", "exams", "result", "5"],
+              "query": [
+                {
+                  "key": "studentId",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "Get full exam result detail - Monthly Test, Score 95/100, Grade A, Rank #1 (Best in class)"
+          },
+          "response": []
+        },
+        {
+          "name": "Student 2 - Result 6 (Good Score: 82/100)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:9092/api/student/exams/result/6?studentId=2",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9092",
+              "path": ["api", "student", "exams", "result", "6"],
+              "query": [
+                {
+                  "key": "studentId",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "Get full exam result detail - Weekly Assessment, Score 82/100, Grade B, Rank #9"
+          },
+          "response": []
+        },
+        {
+          "name": "Student 3 - Result 7 (Average Score: 80/100)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:9092/api/student/exams/result/7?studentId=3",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9092",
+              "path": ["api", "student", "exams", "result", "7"],
+              "query": [
+                {
+                  "key": "studentId",
+                  "value": "3"
+                }
+              ]
+            },
+            "description": "Get full exam result detail - Monthly Test, Score 80/100, Grade B, Rank #7"
+          },
+          "response": []
+        },
+        {
+          "name": "Student 3 - Result 8 (Lower Score: 72/100)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:9092/api/student/exams/result/8?studentId=3",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9092",
+              "path": ["api", "student", "exams", "result", "8"],
+              "query": [
+                {
+                  "key": "studentId",
+                  "value": "3"
+                }
+              ]
+            },
+            "description": "Get full exam result detail - Weekly Assessment, Score 72/100, Grade C, Rank #20"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:9092",
+      "type": "string"
+    },
+    {
+      "key": "student_id_1",
+      "value": "1",
+      "type": "string",
+      "description": "John Doe - Average performer"
+    },
+    {
+      "key": "student_id_2",
+      "value": "2",
+      "type": "string",
+      "description": "Jane Smith - High performer"
+    },
+    {
+      "key": "student_id_3",
+      "value": "3",
+      "type": "string",
+      "description": "Bob Wilson - Lower performer"
+    }
+  ]
+}
+
