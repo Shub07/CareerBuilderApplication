@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 com\org\careerbuilder\models\Exam.class
 com\org\careerbuilder\dto\dashboard\StudentHeader.class
 com\org\careerbuilder\service\NoticeService.class
@@ -28,6 +26,7 @@ com\org\careerbuilder\dto\response\SubjectPerformanceResponse.class
 com\org\careerbuilder\service\StudentDashboardService.class
 com\org\careerbuilder\website\service\NewsroomService.class
 com\org\careerbuilder\dto\response\DashboardResponse$RecentExamScore.class
+com\org\careerbuilder\controller\CertificatesController.class
 com\org\careerbuilder\dto\request\TeacherMessageRequest.class
 com\org\careerbuilder\CareerBuilderApplication.class
 com\org\careerbuilder\models\Student$StudentBuilder.class
@@ -49,6 +48,7 @@ com\org\careerbuilder\repository\ExamFeedbackRepository.class
 com\org\careerbuilder\service\LeaveMetricsService.class
 com\org\careerbuilder\service\ClassScheduleServiceImpl.class
 com\org\careerbuilder\repository\StudentExamAnswerRepository.class
+com\org\careerbuilder\repository\CertificateRepository.class
 com\org\careerbuilder\models\ExamQuestion$ExamQuestionBuilder.class
 com\org\careerbuilder\website\service\BlogService.class
 com\org\careerbuilder\website\service\PartnerService.class
@@ -75,10 +75,12 @@ com\org\careerbuilder\dto\response\DashboardResponse$NoticePanel.class
 com\org\careerbuilder\repository\LeaveRequestRepository.class
 com\org\careerbuilder\website\models\NewsItem.class
 com\org\careerbuilder\dto\response\ExamResultDetailResponse.class
+com\org\careerbuilder\models\Certificate$CertificateCategory.class
 com\org\careerbuilder\service\AssignmentServiceImpl.class
 com\org\careerbuilder\dto\dashboard\ExamSubjectScore$ExamSubjectScoreBuilder.class
 com\org\careerbuilder\models\Faculty.class
 com\org\careerbuilder\models\TeacherMessage$Status.class
+com\org\careerbuilder\models\Certificate.class
 com\org\careerbuilder\dto\dashboard\StudentHeader$StudentHeaderBuilder.class
 com\org\careerbuilder\models\Exam$ExamBuilder.class
 com\org\careerbuilder\dto\response\DashboardResponse$ExamSubjectScore.class
@@ -89,6 +91,7 @@ com\org\careerbuilder\controller\Test.class
 com\org\careerbuilder\models\Fee.class
 com\org\careerbuilder\dto\response\TeacherFeedbackResponse$TeacherFeedbackResponseBuilder.class
 com\org\careerbuilder\repository\ExamSectionRepository.class
+com\org\careerbuilder\service\CertificateService.class
 com\org\careerbuilder\models\ClassSubjectTeacher$ClassSubjectTeacherBuilder.class
 com\org\careerbuilder\repository\RefreshTokenRepository.class
 com\org\careerbuilder\models\ExamQuestion.class
@@ -168,6 +171,7 @@ com\org\careerbuilder\models\StudentNoticeRead$StudentNoticeReadBuilder.class
 com\org\careerbuilder\models\enums\MaterialType.class
 com\org\careerbuilder\dto\response\TeacherFeedbackResponse.class
 com\org\careerbuilder\models\ExamResultBreakdown.class
+com\org\careerbuilder\dto\response\CertificateGroupResponse.class
 com\org\careerbuilder\models\Parent$ParentBuilder.class
 com\org\careerbuilder\repository\StudentNoticeReadRepository.class
 com\org\careerbuilder\dto\dashboard\RecentExamScore$RecentExamScoreBuilder.class
@@ -176,12 +180,14 @@ com\org\careerbuilder\repository\AssignmentSubmissionRepository.class
 com\org\careerbuilder\website\models\BlogCategory.class
 com\org\careerbuilder\service\SchoolService.class
 com\org\careerbuilder\website\repository\PartnerRequestRepository.class
+com\org\careerbuilder\models\Certificate$CertificateStatus.class
 com\org\careerbuilder\website\repository\NewsItemRepository.class
 com\org\careerbuilder\repository\MyClassRepository.class
 com\org\careerbuilder\repository\ParentRepository.class
 com\org\careerbuilder\website\dto\PartnerRequestCreateDTO.class
 com\org\careerbuilder\models\StudyMaterial.class
 com\org\careerbuilder\models\Notice$NoticeBuilder.class
+com\org\careerbuilder\service\CertificateServiceImpl.class
 com\org\careerbuilder\website\models\Partner.class
 com\org\careerbuilder\website\repository\CaseStudyRepository.class
 com\org\careerbuilder\dto\response\AssignmentCardResponse.class
@@ -229,6 +235,7 @@ com\org\careerbuilder\models\School.class
 com\org\careerbuilder\models\StudentPerformanceReport.class
 com\org\careerbuilder\dto\response\UpcomingExamResponse$UpcomingExamResponseBuilder.class
 com\org\careerbuilder\dto\dashboard\RecentExamScore.class
+com\org\careerbuilder\dto\response\CertificateResponse.class
 com\org\careerbuilder\controller\MyClassController.class
 com\org\careerbuilder\dto\response\CompletedExamResponse$CompletedExamResponseBuilder.class
 com\org\careerbuilder\dto\response\PerformanceInsightsResponse.class
@@ -242,4 +249,4 @@ com\org\careerbuilder\dto\dashboard\DashboardCards.class
 com\org\careerbuilder\models\AppUser$AppUserBuilder.class
 com\org\careerbuilder\dto\response\TestScoreResponse.class
 com\org\careerbuilder\models\ExamResultBreakdown$ExamResultBreakdownBuilder.class
->>>>>>> 610f3df6a46b623a276c82ec779d35201e6facf2
+com\org\careerbuilder\models\Certificate$CertificateBuilder.class
