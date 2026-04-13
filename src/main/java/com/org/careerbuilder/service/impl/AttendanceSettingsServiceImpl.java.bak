@@ -1,0 +1,227 @@
+package com.org.careerbuilder.service.impl;
+
+import com.org.careerbuilder.dto.request.AttendanceExceptionRequest;
+import com.org.careerbuilder.dto.request.AttendanceSettingsRequest;
+import com.org.careerbuilder.dto.response.AttendanceExceptionResponse;
+import com.org.careerbuilder.dto.response.AttendanceSettingsResponse;
+import com.org.careerbuilder.models.AttendanceException;
+import com.org.careerbuilder.models.AttendanceSettings;
+import com.org.careerbuilder.models.AppUser;
+import com.org.careerbuilder.models.Student;
+import com.org.careerbuilder.repository.AttendanceExceptionRepository;
+import com.org.careerbuilder.repository.AttendanceSettingsRepository;
+import com.org.careerbuilder.repository.AppUserRepository;
+import com.org.careerbuilder.repository.StudentRepository;
+import com.org.careerbuilder.service.AttendanceSettingsService;
+import com.org.careerbuilder.exceptions.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class AttendanceSettingsServiceImpl implements AttendanceSettingsService {
+
+    private final AttendanceSettingsRepository settingsRepository;
+    private final AttendanceExceptionRepository exceptionRepository;
+    private final StudentRepository studentRepository;
+    private final AppUserRepository appUserRepository;
+
+    @Override
+    public AttendanceSettingsResponse getSettings(Long schoolId) {
+        log.info("Fetching attendance settings for school: {}", schoolId);
+
+        AttendanceSettings settings = settingsRepository.findBySchoolId(schoolId)
+                .orElseThrow(() -> new ResourceNotFoundException("Attendance settings not found for school: " + schoolId));
+
+        return convertToResponse(settings);
+    }
+
+    @Override
+    public AttendanceSettingsResponse updateSettings(Long schoolId, AttendanceSettingsRequest request) {
+        log.info("Updating attendance settings for school: {}", schoolId);
+
+        AttendanceSettings settings = settingsRepository.findBySchoolId(schoolId)
+                .orElseThrow(() -> new ResourceNotFoundException("Attendance settings not found for school: " + schoolId));
+
+        if (request.getWorkingDaysPerWeek() != null) {
+            settings.setWorkingDaysPerWeek(request.getWorkingDaysPerWeek());
+        }
+        if (request.getMinAttendancePercentage() != null) {
+            settings.setMinAttendancePercentage(request.getMinAttendancePercentage());
+        }
+        if (request.getAllowBulkMarking() != null) {
+            settings.setAllowBulkMarking(request.getAllowBulkMarking());
+        }
+        if (request.getAllowRetroactiveMarking() != null) {
+            settings.setAllowRetroactiveMarking(request.getAllowRetroactiveMarking());
+        }
+        if (request.getMaxRetroactiveDays() != null) {
+            settings.setMaxRetroactiveDays(request.getMaxRetroactiveDays());
+        }
+        if (request.getNotifyLowAttendance() != null) {
+            settings.setNotifyLowAttendance(request.getNotifyLowAttendance());
+        }
+        if (request.getLowAttendanceThreshold() != null) {
+            settings.setLowAttendanceThreshold(request.getLowAttendanceThreshold());
+        }
+
+        AttendanceSettings updated = settingsRepository.save(settings);
+        return convertToResponse(updated);
+    }
+
+    @Override
+    public AttendanceSettingsResponse initializeSettings(Long schoolId) {
+        log.info("Initializing attendance settings for school: {}", schoolId);
+
+        AttendanceSettings settings = AttendanceSettings.builder()
+                .schoolId(schoolId)
+                .workingDaysPerWeek(5)
+                .minAttendancePercentage(75)
+                .allowBulkMarking(true)
+                .allowRetroactiveMarking(true)
+                .maxRetroactiveDays(7)
+                .notifyLowAttendance(true)
+                .lowAttendanceThreshold(75)
+                .build();
+
+        AttendanceSettings saved = settingsRepository.save(settings);
+        return convertToResponse(saved);
+    }
+
+    @Override
+    public AttendanceExceptionResponse requestException(AttendanceExceptionRequest request) {
+        log.info("Processing exception request for student: {} on date: {}", request.getStudentId(), request.getExceptionDate());
+
+        Student student = studentRepository.findById(request.getStudentId())
+                .orElseThrow(() -> new ResourceNotFoundException("Student not found with ID: " + request.getStudentId()));
+
+        // Check if exception already exists for this date
+        exceptionRepository.findByStudent_IdAndExceptionDate(request.getStudentId(), request.getExceptionDate())
+                .ifPresent(e -> {
+                    throw new IllegalStateException("Exception already exists for this student on this date");
+                });
+
+        // Assume requester is the student or parent (ID=1 for now, should come from context)
+        AppUser requester = appUserRepository.findById(1L)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        AttendanceException exception = AttendanceException.builder()
+                .student(student)
+                .exceptionDate(request.getExceptionDate())
+                .exceptionType(request.getExceptionType())
+                .reason(request.getReason())
+                .attachmentUrl(request.getAttachmentUrl())
+                .requestedBy(requester)
+                .status("PENDING")
+                .build();
+
+        AttendanceException saved = exceptionRepository.save(exception);
+        return convertToExceptionResponse(saved);
+    }
+
+    @Override
+    public AttendanceExceptionResponse approveException(Long exceptionId, Long approverUserId, String remarks) {
+        log.info("Approving exception: {} by user: {}", exceptionId, approverUserId);
+
+        AttendanceException exception = exceptionRepository.findById(exceptionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Exception not found with ID: " + exceptionId));
+
+        AppUser approver = appUserRepository.findById(approverUserId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + approverUserId));
+
+        exception.setStatus("APPROVED");
+        exception.setApprovedBy(approver);
+        exception.setApprovedAt(LocalDateTime.now());
+
+        AttendanceException updated = exceptionRepository.save(exception);
+        return convertToExceptionResponse(updated);
+    }
+
+    @Override
+    public AttendanceExceptionResponse rejectException(Long exceptionId, Long rejecterUserId, String remarks) {
+        log.info("Rejecting exception: {} by user: {}", exceptionId, rejecterUserId);
+
+        AttendanceException exception = exceptionRepository.findById(exceptionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Exception not found with ID: " + exceptionId));
+
+        AppUser rejecter = appUserRepository.findById(rejecterUserId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + rejecterUserId));
+
+        exception.setStatus("REJECTED");
+        exception.setApprovedBy(rejecter);
+
+        AttendanceException updated = exceptionRepository.save(exception);
+        return convertToExceptionResponse(updated);
+    }
+
+    @Override
+    public Page<AttendanceExceptionResponse> getPendingExceptions(Pageable pageable) {
+        log.info("Fetching pending exceptions");
+
+        return exceptionRepository.findPendingExceptions(pageable)
+                .map(this::convertToExceptionResponse);
+    }
+
+    @Override
+    public Page<AttendanceExceptionResponse> getStudentExceptions(Long studentId, Pageable pageable) {
+        log.info("Fetching exceptions for student: {}", studentId);
+
+        return exceptionRepository.findByStudent_Id(studentId, pageable)
+                .map(this::convertToExceptionResponse);
+    }
+
+    @Override
+    public AttendanceExceptionResponse getExceptionById(Long exceptionId) {
+        log.info("Fetching exception: {}", exceptionId);
+
+        AttendanceException exception = exceptionRepository.findById(exceptionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Exception not found with ID: " + exceptionId));
+
+        return convertToExceptionResponse(exception);
+    }
+
+    // Helper methods
+    private AttendanceSettingsResponse convertToResponse(AttendanceSettings settings) {
+        return AttendanceSettingsResponse.builder()
+                .settingId(settings.getId())
+                .schoolId(settings.getSchoolId())
+                .workingDaysPerWeek(settings.getWorkingDaysPerWeek())
+                .minAttendancePercentage(settings.getMinAttendancePercentage())
+                .allowBulkMarking(settings.getAllowBulkMarking())
+                .allowRetroactiveMarking(settings.getAllowRetroactiveMarking())
+                .maxRetroactiveDays(settings.getMaxRetroactiveDays())
+                .notifyLowAttendance(settings.getNotifyLowAttendance())
+                .lowAttendanceThreshold(settings.getLowAttendanceThreshold())
+                .createdAt(settings.getCreatedAt())
+                .updatedAt(settings.getUpdatedAt())
+                .build();
+    }
+
+    private AttendanceExceptionResponse convertToExceptionResponse(AttendanceException exception) {
+        return AttendanceExceptionResponse.builder()
+                .exceptionId(exception.getId())
+                .studentId(exception.getStudent().getId())
+                .studentName(exception.getStudent().getFirstName() + " " + exception.getStudent().getLastName())
+                .exceptionDate(exception.getExceptionDate())
+                .exceptionType(exception.getExceptionType())
+                .status(exception.getStatus())
+                .reason(exception.getReason())
+                .attachmentUrl(exception.getAttachmentUrl())
+                .requestedById(exception.getRequestedBy().getId())
+                .requestedByName(exception.getRequestedBy().getUsername())
+                .approvedById(exception.getApprovedBy() != null ? exception.getApprovedBy().getId() : null)
+                .approvedByName(exception.getApprovedBy() != null ? exception.getApprovedBy().getUsername() : null)
+                .createdAt(exception.getCreatedAt())
+                .approvedAt(exception.getApprovedAt())
+                .build();
+    }
+}
+

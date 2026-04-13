@@ -1,0 +1,351 @@
+package com.org.careerbuilder.controller;
+
+import com.org.careerbuilder.dto.request.AttendanceRequest;
+import com.org.careerbuilder.dto.request.AttendanceExceptionRequest;
+import com.org.careerbuilder.dto.request.AttendanceSettingsRequest;
+import com.org.careerbuilder.dto.request.BulkAttendanceRequest;
+import com.org.careerbuilder.dto.response.*;
+import com.org.careerbuilder.service.AttendanceService;
+import com.org.careerbuilder.service.AttendanceSettingsService;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+/**
+ * REST Controller for Attendance Management APIs
+ */
+@Slf4j
+@RestController
+@RequestMapping("/api/attendance")
+@CrossOrigin(origins = "*", maxAge = 3600)
+public class AttendanceController {
+
+    private final AttendanceService attendanceService;
+    private final AttendanceSettingsService settingsService;
+
+    public AttendanceController(AttendanceService attendanceService, AttendanceSettingsService settingsService) {
+        this.attendanceService = attendanceService;
+        this.settingsService = settingsService;
+    }
+
+    // ===================== INDIVIDUAL ATTENDANCE OPERATIONS =====================
+
+    /**
+     * Mark attendance for a single student
+     * POST /api/attendance/mark
+     */
+    @PostMapping("/mark")
+    public ResponseEntity<AttendanceRecordResponse> markAttendance(@Valid @RequestBody AttendanceRequest request) {
+        log.info("Request to mark attendance for student: {}", request.getStudentId());
+        AttendanceRecordResponse response = attendanceService.markAttendance(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    /**
+     * Update existing attendance record
+     * PUT /api/attendance/{attendanceId}
+     */
+    @PutMapping("/{attendanceId}")
+    public ResponseEntity<AttendanceRecordResponse> updateAttendance(
+            @PathVariable Long attendanceId,
+            @Valid @RequestBody AttendanceRequest request
+    ) {
+        log.info("Request to update attendance record: {}", attendanceId);
+        AttendanceRecordResponse response = attendanceService.updateAttendance(attendanceId, request);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Get attendance record by ID
+     * GET /api/attendance/{attendanceId}
+     */
+    @GetMapping("/{attendanceId}")
+    public ResponseEntity<AttendanceRecordResponse> getAttendanceById(@PathVariable Long attendanceId) {
+        log.info("Fetching attendance record: {}", attendanceId);
+        AttendanceRecordResponse response = attendanceService.getAttendanceById(attendanceId);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Delete attendance record
+     * DELETE /api/attendance/{attendanceId}
+     */
+    @DeleteMapping("/{attendanceId}")
+    public ResponseEntity<String> deleteAttendance(@PathVariable Long attendanceId) {
+        log.info("Deleting attendance record: {}", attendanceId);
+        attendanceService.deleteAttendance(attendanceId);
+        return ResponseEntity.ok("Attendance record deleted successfully");
+    }
+
+    // ===================== BULK ATTENDANCE OPERATIONS =====================
+
+    /**
+     * Mark attendance for entire class in bulk
+     * POST /api/attendance/bulk/mark
+     */
+    @PostMapping("/bulk/mark")
+    public ResponseEntity<BulkAttendanceResponse> bulkMarkAttendance(@Valid @RequestBody BulkAttendanceRequest request) {
+        log.info("Request to bulk mark attendance for class: {}, section: {}", request.getClassName(), request.getSection());
+        BulkAttendanceResponse response = attendanceService.bulkMarkAttendance(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    // ===================== STUDENT ATTENDANCE RETRIEVAL =====================
+
+    /**
+     * Get attendance records for a student
+     * GET /api/attendance/student/{studentId}
+     */
+    @GetMapping("/student/{studentId}")
+    public ResponseEntity<Page<AttendanceRecordResponse>> getStudentAttendance(
+            @PathVariable Long studentId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "date") String sortBy
+    ) {
+        log.info("Fetching attendance for student: {} from {} to {}", studentId, from, to);
+
+        if (from == null) from = LocalDate.now().minusMonths(1);
+        if (to == null) to = LocalDate.now();
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
+        Page<AttendanceRecordResponse> response = attendanceService.getStudentAttendance(studentId, from, to, pageable);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Get attendance summary for a student
+     * GET /api/attendance/student/{studentId}/summary
+     */
+    @GetMapping("/student/{studentId}/summary")
+    public ResponseEntity<AttendanceSummaryResponse> getStudentAttendanceSummary(
+            @PathVariable Long studentId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to
+    ) {
+        log.info("Generating attendance summary for student: {}", studentId);
+
+        if (from == null) from = LocalDate.now().withDayOfMonth(1);
+        if (to == null) to = LocalDate.now();
+
+        AttendanceSummaryResponse response = attendanceService.getStudentAttendanceSummary(studentId, from, to);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Get attendance percentage for a student
+     * GET /api/attendance/student/{studentId}/percentage
+     */
+    @GetMapping("/student/{studentId}/percentage")
+    public ResponseEntity<Integer> getAttendancePercentage(
+            @PathVariable Long studentId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to
+    ) {
+        log.info("Fetching attendance percentage for student: {}", studentId);
+
+        if (from == null) from = LocalDate.now().withDayOfMonth(1);
+        if (to == null) to = LocalDate.now();
+
+        int percentage = attendanceService.getAttendancePercentage(studentId, from, to);
+        return ResponseEntity.ok(percentage);
+    }
+
+    // ===================== CLASS ATTENDANCE OPERATIONS =====================
+
+    /**
+     * Get attendance records for entire class
+     * GET /api/attendance/class/{className}/{section}
+     */
+    @GetMapping("/class/{className}/{section}")
+    public ResponseEntity<Page<AttendanceRecordResponse>> getClassAttendance(
+            @PathVariable String className,
+            @PathVariable String section,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        log.info("Fetching attendance for class: {} section: {}", className, section);
+
+        if (from == null) from = LocalDate.now().minusMonths(1);
+        if (to == null) to = LocalDate.now();
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("date").descending());
+        Page<AttendanceRecordResponse> response = attendanceService.getClassAttendance(className, section, from, to, pageable);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Get daily attendance report for a class
+     * GET /api/attendance/report/class/{className}/{section}
+     */
+    @GetMapping("/report/class/{className}/{section}")
+    public ResponseEntity<ClassAttendanceReportResponse> getClassAttendanceReport(
+            @PathVariable String className,
+            @PathVariable String section,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+    ) {
+        log.info("Generating attendance report for class: {} section: {}", className, section);
+
+        if (date == null) date = LocalDate.now();
+
+        ClassAttendanceReportResponse response = attendanceService.getClassAttendanceReport(className, section, date);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Get school-wide attendance report
+     * GET /api/attendance/report/school/{schoolId}
+     */
+    @GetMapping("/report/school/{schoolId}")
+    public ResponseEntity<List<ClassAttendanceReportResponse>> getSchoolAttendanceReport(
+            @PathVariable Long schoolId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+    ) {
+        log.info("Generating school-wide attendance report");
+
+        if (date == null) date = LocalDate.now();
+
+        List<ClassAttendanceReportResponse> response = attendanceService.getSchoolAttendanceReport(schoolId, date);
+        return ResponseEntity.ok(response);
+    }
+
+    // ===================== ATTENDANCE SETTINGS =====================
+
+    /**
+     * Get attendance settings for a school
+     * GET /api/attendance/settings/{schoolId}
+     */
+    @GetMapping("/settings/{schoolId}")
+    public ResponseEntity<AttendanceSettingsResponse> getSettings(@PathVariable Long schoolId) {
+        log.info("Fetching attendance settings for school: {}", schoolId);
+        AttendanceSettingsResponse response = settingsService.getSettings(schoolId);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Update attendance settings for a school
+     * PUT /api/attendance/settings/{schoolId}
+     */
+    @PutMapping("/settings/{schoolId}")
+    public ResponseEntity<AttendanceSettingsResponse> updateSettings(
+            @PathVariable Long schoolId,
+            @Valid @RequestBody AttendanceSettingsRequest request
+    ) {
+        log.info("Updating attendance settings for school: {}", schoolId);
+        AttendanceSettingsResponse response = settingsService.updateSettings(schoolId, request);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Initialize default settings for a school
+     * POST /api/attendance/settings/{schoolId}/initialize
+     */
+    @PostMapping("/settings/{schoolId}/initialize")
+    public ResponseEntity<AttendanceSettingsResponse> initializeSettings(@PathVariable Long schoolId) {
+        log.info("Initializing attendance settings for school: {}", schoolId);
+        AttendanceSettingsResponse response = settingsService.initializeSettings(schoolId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    // ===================== ATTENDANCE EXCEPTIONS =====================
+
+    /**
+     * Request an attendance exception (sick leave, medical, etc.)
+     * POST /api/attendance/exception/request
+     */
+    @PostMapping("/exception/request")
+    public ResponseEntity<AttendanceExceptionResponse> requestException(
+            @Valid @RequestBody AttendanceExceptionRequest request
+    ) {
+        log.info("Processing exception request for student: {}", request.getStudentId());
+        AttendanceExceptionResponse response = settingsService.requestException(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    /**
+     * Approve an attendance exception
+     * PUT /api/attendance/exception/{exceptionId}/approve
+     */
+    @PutMapping("/exception/{exceptionId}/approve")
+    public ResponseEntity<AttendanceExceptionResponse> approveException(
+            @PathVariable Long exceptionId,
+            @RequestParam Long approverUserId,
+            @RequestParam(required = false) String remarks
+    ) {
+        log.info("Approving exception: {}", exceptionId);
+        AttendanceExceptionResponse response = settingsService.approveException(exceptionId, approverUserId, remarks);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Reject an attendance exception
+     * PUT /api/attendance/exception/{exceptionId}/reject
+     */
+    @PutMapping("/exception/{exceptionId}/reject")
+    public ResponseEntity<AttendanceExceptionResponse> rejectException(
+            @PathVariable Long exceptionId,
+            @RequestParam Long rejecterUserId,
+            @RequestParam(required = false) String remarks
+    ) {
+        log.info("Rejecting exception: {}", exceptionId);
+        AttendanceExceptionResponse response = settingsService.rejectException(exceptionId, rejecterUserId, remarks);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Get pending exceptions
+     * GET /api/attendance/exception/pending
+     */
+    @GetMapping("/exception/pending")
+    public ResponseEntity<Page<AttendanceExceptionResponse>> getPendingExceptions(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        log.info("Fetching pending exceptions");
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<AttendanceExceptionResponse> response = settingsService.getPendingExceptions(pageable);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Get exceptions for a student
+     * GET /api/attendance/exception/student/{studentId}
+     */
+    @GetMapping("/exception/student/{studentId}")
+    public ResponseEntity<Page<AttendanceExceptionResponse>> getStudentExceptions(
+            @PathVariable Long studentId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        log.info("Fetching exceptions for student: {}", studentId);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<AttendanceExceptionResponse> response = settingsService.getStudentExceptions(studentId, pageable);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Get exception by ID
+     * GET /api/attendance/exception/{exceptionId}
+     */
+    @GetMapping("/exception/{exceptionId}")
+    public ResponseEntity<AttendanceExceptionResponse> getExceptionById(@PathVariable Long exceptionId) {
+        log.info("Fetching exception: {}", exceptionId);
+        AttendanceExceptionResponse response = settingsService.getExceptionById(exceptionId);
+        return ResponseEntity.ok(response);
+    }
+}
+
