@@ -87,7 +87,8 @@ public class AssignmentServiceImpl implements AssignmentService {
                     subjectName,
                     teacherName,
                     assignment.getDueDate(),
-                    status
+                    status,
+                    assignment.getDescription()
                 );
             })
             .toList();

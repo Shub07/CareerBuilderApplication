@@ -3,16 +3,14 @@ package com.org.careerbuilder.service;
 import com.org.careerbuilder.dto.response.*;
 import com.org.careerbuilder.models.*;
 import com.org.careerbuilder.repository.*;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
@@ -36,7 +34,7 @@ public class ExamServiceImpl implements ExamServiceInterface {
         List<ExamResult> upcomingResults = examResultRepository.findUpcomingExams(studentId);
         
         return upcomingResults.stream()
-                .map(result -> mapToUpcomingExamResponse(result))
+                .map(this::mapToUpcomingExamResponse)
                 .collect(Collectors.toList());
     }
 
@@ -50,7 +48,7 @@ public class ExamServiceImpl implements ExamServiceInterface {
         List<ExamResult> completedResults = examResultRepository.findCompletedExams(studentId);
         
         return completedResults.stream()
-                .map(result -> mapToCompletedExamResponse(result))
+                .map(this::mapToCompletedExamResponse)
                 .collect(Collectors.toList());
     }
 

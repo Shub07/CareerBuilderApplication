@@ -1,16 +1,19 @@
 package com.org.careerbuilder.repository;
 
+import com.org.careerbuilder.dto.SchoolClassDTO;
+import com.org.careerbuilder.models.Student;
 import java.util.List;
-
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.org.careerbuilder.dto.SchoolClassDTO;
-import com.org.careerbuilder.models.Student;
-
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
+
+	Optional<Student> findFirstByEmailIgnoreCase(String email);
+
+	Optional<Student> findFirstByPhone(String phone);
 
 	@Query(value = """
 	SELECT

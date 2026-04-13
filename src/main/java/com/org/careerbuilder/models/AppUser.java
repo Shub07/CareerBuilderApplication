@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -19,7 +20,8 @@ import java.time.LocalDateTime;
 @Table(
         name = "app_users",
         uniqueConstraints = {
-                @UniqueConstraint(name = "uk_app_users_email", columnNames = "email")
+                @UniqueConstraint(name = "uk_app_users_email", columnNames = "email"),
+                @UniqueConstraint(name = "uk_app_users_mobile", columnNames = "mobile")
         },
         indexes = {
                 @Index(name = "idx_app_users_role", columnList = "role"),
@@ -42,13 +44,19 @@ public class AppUser {
     private Long id;
 
     /**
-     * Unique login email.
+     * Optional login email. At least one of email/mobile is required by service validation.
      */
-    @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
     @Size(max = 150, message = "Email must not exceed 150 characters")
-    @Column(name = "email", nullable = false, length = 150)
+    @Column(name = "email", length = 150)
     private String email;
+
+    /**
+     * Optional login mobile. At least one of email/mobile is required by service validation.
+     */
+    @Pattern(regexp = "^[0-9]{10,15}$", message = "Mobile must be 10 to 15 digits")
+    @Column(name = "mobile", length = 15)
+    private String mobile;
 
     /**
      * BCrypt hashed password.

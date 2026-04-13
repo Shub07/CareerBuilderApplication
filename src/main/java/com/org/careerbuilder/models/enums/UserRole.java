@@ -5,6 +5,8 @@ package com.org.careerbuilder.models.enums;
  */
 public enum UserRole {
     STUDENT,
+    PARENT,
+    SCHOOL_ADMIN,
     TEACHER,
     ADMIN
 }

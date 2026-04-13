@@ -1,0 +1,397 @@
+{
+  "info": {
+    "_postman_id": "attendance-api-collection",
+    "name": "Career Builder - Attendance API",
+    "description": "Complete API collection for Attendance Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Mark Attendance",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentId\": 1,\n  \"date\": \"2026-04-01\",\n  \"status\": \"PRESENT\",\n  \"className\": \"10A\",\n  \"remarks\": \"Present in class\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:9091/api/attendance/mark",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "9091",
+          "path": [
+            "api",
+            "attendance",
+            "mark"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Update Attendance",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"LEAVE\",\n  \"remarks\": \"Approved leave\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:9091/api/attendance/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "9091",
+          "path": [
+            "api",
+            "attendance",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. Get Attendance by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9091/api/attendance/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "9091",
+          "path": [
+            "api",
+            "attendance",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. Delete Attendance",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9091/api/attendance/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "9091",
+          "path": [
+            "api",
+            "attendance",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. Bulk Mark Attendance",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"schoolId\": 1,\n  \"date\": \"2026-04-01\",\n  \"className\": \"10A\",\n  \"section\": \"A\",\n  \"subjectId\": null,\n  \"records\": [\n    {\n      \"studentId\": 1,\n      \"status\": \"PRESENT\",\n      \"remarks\": \"Present\"\n    },\n    {\n      \"studentId\": 2,\n      \"status\": \"ABSENT\",\n      \"remarks\": \"Sick leave\"\n    },\n    {\n      \"studentId\": 3,\n      \"status\": \"LEAVE\",\n      \"remarks\": \"Approved leave\"\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "http://localhost:9091/api/attendance/bulk-mark",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "9091",
+          "path": [
+            "api",
+            "attendance",
+            "bulk-mark"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "6. Get Student Attendance",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9091/api/attendance/student/1?fromDate=2026-03-01&toDate=2026-04-01&page=0&size=10",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "9091",
+          "path": [
+            "api",
+            "attendance",
+            "student",
+            "1"
+          ],
+          "query": [
+            {
+              "key": "fromDate",
+              "value": "2026-03-01"
+            },
+            {
+              "key": "toDate",
+              "value": "2026-04-01"
+            },
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "7. Get Student Attendance Summary",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9091/api/attendance/student/1/summary?fromDate=2026-04-01&toDate=2026-04-30",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "9091",
+          "path": [
+            "api",
+            "attendance",
+            "student",
+            "1",
+            "summary"
+          ],
+          "query": [
+            {
+              "key": "fromDate",
+              "value": "2026-04-01"
+            },
+            {
+              "key": "toDate",
+              "value": "2026-04-30"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "8. Get Class Attendance",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9091/api/attendance/class?className=10A&section=A&fromDate=2026-04-01&toDate=2026-04-30&page=0&size=10",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "9091",
+          "path": [
+            "api",
+            "attendance",
+            "class"
+          ],
+          "query": [
+            {
+              "key": "className",
+              "value": "10A"
+            },
+            {
+              "key": "section",
+              "value": "A"
+            },
+            {
+              "key": "fromDate",
+              "value": "2026-04-01"
+            },
+            {
+              "key": "toDate",
+              "value": "2026-04-30"
+            },
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "9. Get Class Attendance Report",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9091/api/attendance/class/report?className=10A&section=A&date=2026-04-01",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "9091",
+          "path": [
+            "api",
+            "attendance",
+            "class",
+            "report"
+          ],
+          "query": [
+            {
+              "key": "className",
+              "value": "10A"
+            },
+            {
+              "key": "section",
+              "value": "A"
+            },
+            {
+              "key": "date",
+              "value": "2026-04-01"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "10. Get School Attendance Report",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9091/api/attendance/school/report?schoolId=1&date=2026-04-01",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "9091",
+          "path": [
+            "api",
+            "attendance",
+            "school",
+            "report"
+          ],
+          "query": [
+            {
+              "key": "schoolId",
+              "value": "1"
+            },
+            {
+              "key": "date",
+              "value": "2026-04-01"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "11. Get Attendance Percentage",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9091/api/attendance/student/1/percentage?fromDate=2026-04-01&toDate=2026-04-30",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "9091",
+          "path": [
+            "api",
+            "attendance",
+            "student",
+            "1",
+            "percentage"
+          ],
+          "query": [
+            {
+              "key": "fromDate",
+              "value": "2026-04-01"
+            },
+            {
+              "key": "toDate",
+              "value": "2026-04-30"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "12. Get Attendance Statistics",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:9091/api/attendance/student/1/statistics?fromDate=2026-04-01&toDate=2026-04-30",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "9091",
+          "path": [
+            "api",
+            "attendance",
+            "student",
+            "1",
+            "statistics"
+          ],
+          "query": [
+            {
+              "key": "fromDate",
+              "value": "2026-04-01"
+            },
+            {
+              "key": "toDate",
+              "value": "2026-04-30"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
+

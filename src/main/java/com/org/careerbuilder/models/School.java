@@ -26,7 +26,7 @@ public class School {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "school_id", nullable = false, updatable = false)
+	@Column(name = "id", nullable = false, updatable = false)
 	private Long id;
 
 	@NotBlank(message = "School name is required")

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(
@@ -40,4 +41,30 @@ public class AttendanceRecord {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
     private AttendanceStatus status;
+
+    @Column(name = "class_name", length = 50)
+    private String className;
+
+    @Column(name = "section", length = 10)
+    private String section;
+
+    @Column(name = "remarks", columnDefinition = "TEXT")
+    private String remarks;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }

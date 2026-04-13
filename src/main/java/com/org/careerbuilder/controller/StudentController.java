@@ -1,9 +1,9 @@
 package com.org.careerbuilder.controller;
+import com.org.careerbuilder.models.Student;
 import com.org.careerbuilder.service.StudentService;
 import jakarta.validation.Valid;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.org.careerbuilder.models.Student;
-import com.org.careerbuilder.service.StudentDashboardServiceImpl;
 
 @Slf4j
 @RestController
@@ -52,6 +49,15 @@ public class StudentController {
     public Student getById(@PathVariable Long id) {
     	  log.info("Fetching student by ID: {}", id);
         return service.getById(id);
+    }
+
+    @GetMapping("/resolve-school")
+    public Map<String, Object> resolveSchoolByContact(
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String mobile
+    ) {
+        log.info("Resolving school by contact. email={}, mobilePresent={}", email, mobile != null && !mobile.isBlank());
+        return service.resolveSchoolByContact(email, mobile);
     }
 
     @PutMapping("/{id}")

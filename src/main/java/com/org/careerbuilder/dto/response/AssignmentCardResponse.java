@@ -8,5 +8,6 @@ public record AssignmentCardResponse(
         String subject,
         String teacher,
         LocalDate dueDate,
-        String status
+        String status,
+        String description
 ) {}

@@ -1,5 +1,6 @@
 package com.org.careerbuilder.models;
 
+import com.org.careerbuilder.models.enums.NoticeCategory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +12,9 @@ import java.time.LocalDateTime;
 @Table(
         name = "notices",
         indexes = {
-                @Index(name = "idx_notice_school_created", columnList = "school_id, created_at")
+                @Index(name = "idx_notice_school_created", columnList = "school_id, created_at"),
+                @Index(name = "idx_notice_category", columnList = "category"),
+                @Index(name = "idx_notice_pinned", columnList = "is_pinned")
         }
 )
 @Getter @Setter
@@ -33,25 +36,44 @@ public class Notice {
     @Column(name = "title", nullable = false, length = 200)
     private String title;
 
-    @Column(name = "body", length = 2000)
+    @Column(name = "description", length = 500)
+    private String description;
+
+    @Column(name = "body", length = 3000)
     private String body;
 
-    @Column(name = "created_at", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category", nullable = false, length = 50)
+    private NoticeCategory category;
+
+    @Column(name = "source", length = 150)
+    private String source;
+
+    @Column(name = "is_pinned", nullable = false)
+    private Boolean isPinned;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    // Explicit getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
-    public Long getSchoolId() { return schoolId; }
-    public void setSchoolId(Long schoolId) { this.schoolId = schoolId; }
+    @PrePersist
+    protected void onCreate() {
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+        if (this.isPinned == null) {
+            this.isPinned = false;
+        }
+        if (this.category == null) {
+            this.category = NoticeCategory.OTHER;
+        }
+        this.updatedAt = LocalDateTime.now();
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-
-    public String getBody() { return body; }
-    public void setBody(String body) { this.body = body; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }
