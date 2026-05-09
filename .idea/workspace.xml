@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e450bc4e-5467-4f4e-97df-8f15c31e08bd" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/CareerBuilderApplication-Shubham/src/main/java/com/org/careerbuilder/dto/request/ExamMarkEntryBatchRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CareerBuilderApplication-Shubham/src/main/java/com/org/careerbuilder/dto/request/ExamMarkEntryRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CareerBuilderApplication-Shubham/src/main/java/com/org/careerbuilder/dto/request/ExamMarksEditRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CareerBuilderApplication-Shubham/src/main/java/com/org/careerbuilder/dto/response/ExamMarkEntryBoardResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CareerBuilderApplication-Shubham/src/main/java/com/org/careerbuilder/dto/response/ExamMarkEntryRowResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CareerBuilderApplication-Shubham/src/main/java/com/org/careerbuilder/dto/response/ExamMarksHistoryResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CareerBuilderApplication-Shubham/src/main/java/com/org/careerbuilder/dto/response/ImportMarksPreviewResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CareerBuilderApplication-Shubham/src/main/java/com/org/careerbuilder/dto/response/TeacherExamCardResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CareerBuilderApplication-Shubham/src/main/java/com/org/careerbuilder/service/TeacherExamMarksService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CareerBuilderApplication-Shubham/src/main/java/com/org/careerbuilder/service/impl/TeacherExamMarksServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_C:/Users/Admin/Downloads/CareerBuilderApplication-Shubham" value="3CgC1judUm7wL0ttEgCfC3XqNJt" />
+    </persistenceIdMap>
+  </component>
+  <component name="CopilotUserSelectedChatMode">
+    <option name="chatModeId" value="Agent" />
+  </component>
+  <component name="CopilotUserSelectedModel">
+    <selectedModels>
+      <entry key="agent-panel" value="Claude Haiku 4.5" />
+      <entry key="chat-panel" value="Claude Haiku 4.5" />
+    </selectedModels>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Shub07&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Shub07/CareerBuilderApplication&quot;,
+    &quot;accountId&quot;: &quot;84b320bc-ff3f-410f-b6e9-2e3fb37f1c1a&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="3CgC1judUm7wL0ttEgCfC3XqNJt" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.CareerBuilderApplication.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Shubham&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Admin/Downloads/CareerBuilderApplication-Shubham&quot;
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e450bc4e-5467-4f4e-97df-8f15c31e08bd" name="Changes" comment="" />
+      <created>1776797612850</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1776797612850</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>
