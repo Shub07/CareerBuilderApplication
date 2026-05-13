@@ -12,4 +12,9 @@ public interface DailyLifeActivityRepository extends JpaRepository<DailyLifeActi
     long countByStudent_IdAndActivityDate(Long studentId, LocalDate activityDate);
 
     long countByStudent_IdAndActivityDateAndCompletedTrue(Long studentId, LocalDate activityDate);
+
+    List<DailyLifeActivity> findByStudent_IdInAndActivityDateOrderByStudent_IdAscStartTimeAsc(List<Long> studentIds, LocalDate activityDate);
+
+    List<DailyLifeActivity> findByStudent_IdAndActivityDateBetweenOrderByActivityDateAscStartTimeAsc(
+            Long studentId, LocalDate from, LocalDate to);
 }

@@ -48,16 +48,21 @@ public class AssignmentServiceImpl implements AssignmentService {
 
         return assignmentRepository.findAll()
             .stream()
+            .filter(Assignment::visibleToStudents)
             .map(assignment -> {
                 AssignmentSubmission submission = submissionByAssignmentId.get(assignment.getId());
 
                 String status;
-                if (submission != null) {
-                status = "Submitted";
-                } else if (assignment.getDueDate() != null && assignment.getDueDate().isBefore(LocalDateTime.now().toLocalDate())) {
-                status = "Overdue";
+                boolean hasFile = submission != null
+                        && submission.getFilePath() != null
+                        && !submission.getFilePath().isBlank();
+                if (hasFile) {
+                    status = "Submitted";
+                } else if (assignment.getDueDate() != null
+                        && LocalDateTime.now().isAfter(assignment.dueDateTime())) {
+                    status = "Overdue";
                 } else {
-                status = "Pending";
+                    status = "Pending";
                 }
 
                 String teacherName = "Not assigned";
@@ -107,18 +112,37 @@ public class AssignmentServiceImpl implements AssignmentService {
             Assignment assignment = assignmentRepository.findById(assignmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Assignment not found with id: " + assignmentId));
 
+            if (!assignment.visibleToStudents()) {
+                throw new IllegalArgumentException("This assignment is not open for submission.");
+            }
+
             Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + studentId));
 
-            boolean isLate = assignment.getDueDate() != null &&
-                LocalDateTime.now().toLocalDate().isAfter(assignment.getDueDate());
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime dueEnd = assignment.dueDateTime();
+            boolean isLate = now.isAfter(dueEnd);
+            boolean lateAllowed = allowLate || assignment.isAllowLateSubmission();
 
-            if (isLate && !allowLate) {
-            throw new IllegalArgumentException("This assignment is overdue. Confirm late submission to continue.");
+            if (isLate && !lateAllowed) {
+                throw new IllegalArgumentException("This assignment is overdue. Confirm late submission to continue.");
             }
 
             if (file == null || file.isEmpty()) {
-            throw new IllegalArgumentException("Assignment file is required.");
+                throw new IllegalArgumentException("Assignment file is required.");
+            }
+
+            var existingOpt = repo.findByAssignment_IdAndStudent_Id(assignmentId, studentId);
+            if (existingOpt.isPresent()) {
+                AssignmentSubmission ex = existingOpt.get();
+                boolean hasFile = ex.getFilePath() != null && !ex.getFilePath().isBlank();
+                if (hasFile) {
+                    boolean canReplace = assignment.isAllowResubmission()
+                            || ex.getStatus() == AssignmentStatus.RETURNED;
+                    if (!canReplace) {
+                        throw new IllegalArgumentException("Already submitted for this assignment.");
+                    }
+                }
             }
 
             String originalFileName = Objects.requireNonNullElse(file.getOriginalFilename(), "assignment_file");
@@ -137,7 +161,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 
             s.setFilePath(path.toString());
             s.setComments(comments);
-            s.setSubmittedAt(LocalDateTime.now());
+            s.setSubmittedAt(now);
 
             s.setStatus(isLate ? AssignmentStatus.LATE : AssignmentStatus.SUBMITTED);
 

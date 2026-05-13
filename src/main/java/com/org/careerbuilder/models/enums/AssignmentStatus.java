@@ -5,5 +5,7 @@ public enum AssignmentStatus {
     PENDING,
     SUBMITTED,
     LATE,
-    GRADED
+    GRADED,
+    /** Teacher returned work for revision; student may resubmit if allowed. */
+    RETURNED
 }

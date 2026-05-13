@@ -8,6 +8,7 @@ import com.org.careerbuilder.models.Student;
 import com.org.careerbuilder.models.StudentNoticeRead;
 import com.org.careerbuilder.models.enums.NoticeCategory;
 import com.org.careerbuilder.repository.NoticeRepository;
+import com.org.careerbuilder.repository.NoticeAudienceStudentRepository;
 import com.org.careerbuilder.repository.StudentNoticeReadRepository;
 import com.org.careerbuilder.repository.StudentRepository;
 import com.org.careerbuilder.service.NoticeService;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class NoticeServiceImpl implements NoticeService {
 
     private final NoticeRepository noticeRepository;
+    private final NoticeAudienceStudentRepository noticeAudienceStudentRepository;
     private final StudentNoticeReadRepository studentNoticeReadRepository;
     private final StudentRepository studentRepository;
 
@@ -46,7 +49,8 @@ public class NoticeServiceImpl implements NoticeService {
         log.info("Fetching notices summary for school: {}", schoolId);
 
         // Get all notices for school
-        List<Notice> allNotices = noticeRepository.findBySchoolIdOrderByIsPinnedDescCreatedAtDesc(schoolId, Pageable.unpaged()).getContent();
+        List<Notice> allNoticesRaw = noticeRepository.findBySchoolIdOrderByIsPinnedDescCreatedAtDesc(schoolId, Pageable.unpaged()).getContent();
+        List<Notice> allNotices = filterVisibleNotices(allNoticesRaw, studentId);
 
         // Calculate new notices threshold (24 hours ago)
         LocalDateTime newNoticesThreshold = LocalDateTime.now().minusHours(NEW_NOTICE_HOURS);
@@ -115,8 +119,14 @@ public class NoticeServiceImpl implements NoticeService {
         log.info("Fetching all notices for school: {}", schoolId);
 
         Page<Notice> noticePage = noticeRepository.findBySchoolIdOrderByIsPinnedDescCreatedAtDesc(schoolId, pageable);
-
-        return noticePage.map(n -> toNoticeResponse(n, studentId));
+        if (studentId == null) {
+            return noticePage.map(n -> toNoticeResponse(n, studentId));
+        }
+        List<Notice> visible = filterVisibleNotices(
+                noticeRepository.findBySchoolIdOrderByIsPinnedDescCreatedAtDesc(schoolId, Pageable.unpaged()).getContent(),
+                studentId
+        );
+        return toPage(visible, pageable).map(n -> toNoticeResponse(n, studentId));
     }
 
     /**
@@ -128,6 +138,7 @@ public class NoticeServiceImpl implements NoticeService {
         log.info("Fetching notices for school: {} with category: {}", schoolId, category);
 
         List<Notice> notices = noticeRepository.findBySchoolIdAndCategoryOrderByIsPinnedDescCreatedAtDesc(schoolId, category);
+        notices = filterVisibleNotices(notices, studentId);
 
         return notices.stream()
                 .map(n -> toNoticeResponse(n, studentId))
@@ -143,6 +154,7 @@ public class NoticeServiceImpl implements NoticeService {
         log.info("Fetching pinned notices for school: {}", schoolId);
 
         List<Notice> notices = noticeRepository.findBySchoolIdAndIsPinnedTrueOrderByCreatedAtDesc(schoolId);
+        notices = filterVisibleNotices(notices, studentId);
 
         return notices.stream()
                 .map(n -> toNoticeResponse(n, studentId))
@@ -159,6 +171,7 @@ public class NoticeServiceImpl implements NoticeService {
 
         LocalDateTime threshold = LocalDateTime.now().minusHours(NEW_NOTICE_HOURS);
         List<Notice> notices = noticeRepository.findNewNotices(schoolId, threshold);
+        notices = filterVisibleNotices(notices, studentId);
 
         return notices.stream()
                 .map(n -> toNoticeResponse(n, studentId))
@@ -174,8 +187,14 @@ public class NoticeServiceImpl implements NoticeService {
         log.info("Searching notices for school: {} with query: {}", schoolId, query);
 
         Page<Notice> noticePage = noticeRepository.searchNotices(schoolId, query, pageable);
-
-        return noticePage.map(n -> toNoticeResponse(n, studentId));
+        if (studentId == null) {
+            return noticePage.map(n -> toNoticeResponse(n, studentId));
+        }
+        List<Notice> visible = filterVisibleNotices(
+                noticeRepository.searchNotices(schoolId, query, Pageable.unpaged()).getContent(),
+                studentId
+        );
+        return toPage(visible, pageable).map(n -> toNoticeResponse(n, studentId));
     }
 
     /**
@@ -191,6 +210,9 @@ public class NoticeServiceImpl implements NoticeService {
 
         if (!notice.getSchoolId().equals(schoolId)) {
             throw new RuntimeException("Unauthorized access to notice");
+        }
+        if (studentId != null && !isVisibleToStudent(notice.getId(), studentId)) {
+            throw new RuntimeException("Notice is not visible for this student");
         }
 
         return toNoticeResponse(notice, studentId);
@@ -343,6 +365,36 @@ public class NoticeServiceImpl implements NoticeService {
                 .createdAt(notice.getCreatedAt())
                 .updatedAt(notice.getUpdatedAt())
                 .build();
+    }
+
+    private List<Notice> filterVisibleNotices(List<Notice> notices, Long studentId) {
+        if (studentId == null || notices.isEmpty()) {
+            return notices;
+        }
+        Set<Long> targetedNoticeIds = notices.stream()
+                .map(Notice::getId)
+                .filter(id -> noticeAudienceStudentRepository.existsByNotice_IdAndStudent_Id(id, studentId))
+                .collect(Collectors.toSet());
+        return notices.stream()
+                .filter(n -> {
+                    long targeted = noticeAudienceStudentRepository.countByNotice_Id(n.getId());
+                    return targeted == 0 || targetedNoticeIds.contains(n.getId());
+                })
+                .toList();
+    }
+
+    private boolean isVisibleToStudent(Long noticeId, Long studentId) {
+        long targeted = noticeAudienceStudentRepository.countByNotice_Id(noticeId);
+        return targeted == 0 || noticeAudienceStudentRepository.existsByNotice_IdAndStudent_Id(noticeId, studentId);
+    }
+
+    private Page<Notice> toPage(List<Notice> notices, Pageable pageable) {
+        int start = (int) pageable.getOffset();
+        if (start >= notices.size()) {
+            return new PageImpl<>(List.of(), pageable, notices.size());
+        }
+        int end = Math.min(start + pageable.getPageSize(), notices.size());
+        return new PageImpl<>(notices.subList(start, end), pageable, notices.size());
     }
 
         // â”€â”€ Backward-compat methods used by Dashboard services â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€

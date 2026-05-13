@@ -1,0 +1,37 @@
+package com.org.careerbuilder.dto.request;
+
+import com.org.careerbuilder.models.enums.LessonPlanTopicStatus;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+
+import java.time.LocalDate;
+
+@Data
+public class LessonPlanTopicUpsertRequest {
+
+    @NotBlank
+    @Size(max = 300)
+    private String title;
+
+    private String description;
+
+    @NotNull
+    private Integer sortOrder;
+
+    private LessonPlanTopicStatus status;
+
+    @NotBlank
+    @Size(max = 50)
+    private String className;
+
+    @NotBlank
+    @Size(max = 10)
+    private String section;
+
+    @NotNull
+    private Long subjectId;
+
+    private LocalDate lastTaughtDate;
+}

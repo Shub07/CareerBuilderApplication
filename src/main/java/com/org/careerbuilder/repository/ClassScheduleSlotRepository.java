@@ -10,4 +10,8 @@ public interface ClassScheduleSlotRepository extends JpaRepository<ClassSchedule
     List<ClassScheduleSlot> findBySchoolIdAndClassNameAndSectionAndDayOfWeekAndActiveTrueOrderByStartTime(
             Long schoolId, String className, String section, Integer dayOfWeek
     );
+
+    List<ClassScheduleSlot> findBySchoolIdAndClassNameAndSectionAndSubject_IdAndDayOfWeekAndActiveTrueOrderByStartTime(
+            Long schoolId, String className, String section, Long subjectId, Integer dayOfWeek
+    );
 }

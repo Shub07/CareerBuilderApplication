@@ -1,0 +1,131 @@
+{
+  "info": {
+    "_postman_id": "9cdb1402-8f09-4e9d-9f42-c86b3f7d8abc",
+    "name": "Teacher Notices API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "APIs for Teacher Notices (filters, list, create, edit, publish, delete, attachment upload/download)."
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:9091" },
+    { "key": "facultyId", "value": "1" },
+    { "key": "teacherNoticeId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Filters",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/teacher/notices/{{facultyId}}/filters?studentQuery="
+      }
+    },
+    {
+      "name": "List Notices",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/teacher/notices/{{facultyId}}?tab=ALL&query="
+      }
+    },
+    {
+      "name": "Get Notice",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/teacher/notices/{{facultyId}}/{{teacherNoticeId}}"
+      }
+    },
+    {
+      "name": "Upload Attachment",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": ""
+            }
+          ]
+        },
+        "url": "{{baseUrl}}/api/teacher/notices/{{facultyId}}/attachments"
+      }
+    },
+    {
+      "name": "Create Class Announcement",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Exam Schedule Change\",\n  \"description\": \"Tomorrow test is shifted to 11 AM.\",\n  \"classes\": [\n    { \"className\": \"Grade 10\", \"section\": \"A\" },\n    { \"className\": \"Grade 10\", \"section\": \"B\" }\n  ],\n  \"attachmentUrl\": \"uploads/notices/sample.pdf\",\n  \"attachmentFileName\": \"schedule.pdf\",\n  \"attachmentFileType\": \"application/pdf\",\n  \"attachmentFileSize\": 12034,\n  \"draft\": false\n}"
+        },
+        "url": "{{baseUrl}}/api/teacher/notices/{{facultyId}}/class-announcements"
+      }
+    },
+    {
+      "name": "Create Student Alert",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Low Attendance Alert\",\n  \"description\": \"Please meet me after class today.\",\n  \"studentIds\": [1, 2],\n  \"attachmentUrl\": \"uploads/notices/alert.pdf\",\n  \"attachmentFileName\": \"alert.pdf\",\n  \"attachmentFileType\": \"application/pdf\",\n  \"attachmentFileSize\": 8450,\n  \"draft\": false\n}"
+        },
+        "url": "{{baseUrl}}/api/teacher/notices/{{facultyId}}/student-alerts"
+      }
+    },
+    {
+      "name": "Update Class Announcement",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Updated: Exam Schedule Change\",\n  \"description\": \"Updated timing is 11:30 AM.\",\n  \"classes\": [\n    { \"className\": \"Grade 10\", \"section\": \"A\" }\n  ],\n  \"attachmentUrl\": \"uploads/notices/updated_schedule.pdf\",\n  \"attachmentFileName\": \"updated_schedule.pdf\",\n  \"attachmentFileType\": \"application/pdf\",\n  \"attachmentFileSize\": 14000,\n  \"draft\": false\n}"
+        },
+        "url": "{{baseUrl}}/api/teacher/notices/{{facultyId}}/{{teacherNoticeId}}/class-announcement"
+      }
+    },
+    {
+      "name": "Update Student Alert",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Updated: Low Attendance Alert\",\n  \"description\": \"Meet me during break.\",\n  \"studentIds\": [1],\n  \"attachmentUrl\": \"uploads/notices/updated_alert.pdf\",\n  \"attachmentFileName\": \"updated_alert.pdf\",\n  \"attachmentFileType\": \"application/pdf\",\n  \"attachmentFileSize\": 9300,\n  \"draft\": false\n}"
+        },
+        "url": "{{baseUrl}}/api/teacher/notices/{{facultyId}}/{{teacherNoticeId}}/student-alert"
+      }
+    },
+    {
+      "name": "Publish Draft Notice",
+      "request": {
+        "method": "PATCH",
+        "url": "{{baseUrl}}/api/teacher/notices/{{facultyId}}/{{teacherNoticeId}}/publish"
+      }
+    },
+    {
+      "name": "Download Attachment",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/teacher/notices/{{facultyId}}/{{teacherNoticeId}}/attachment/download"
+      }
+    },
+    {
+      "name": "Delete Notice",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/api/teacher/notices/{{facultyId}}/{{teacherNoticeId}}"
+      }
+    }
+  ]
+}
