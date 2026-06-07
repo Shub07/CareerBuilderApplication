@@ -44,12 +44,25 @@ public class Certificate {
     @Column(name = "file_path", length = 500)
     private String filePath;
 
+    @Column(name = "file_name", length = 255)
+    private String fileName;
+
+    @Column(name = "file_size_bytes")
+    private Long fileSizeBytes;
+
+    @Column(name = "uploaded_by", length = 100)
+    private String uploadedBy;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
     public enum CertificateCategory {
-        ACADEMIC, MISCELLANEOUS
+        ACADEMIC,
+        REGISTRATION,
+        ACHIEVEMENT,
+        SPORTS,
+        MISCELLANEOUS
     }
 
     public enum CertificateStatus {

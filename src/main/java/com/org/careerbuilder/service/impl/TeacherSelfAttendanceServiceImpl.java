@@ -15,8 +15,17 @@ import com.org.careerbuilder.repository.TeacherLeaveBalanceRepository;
 import com.org.careerbuilder.repository.TeacherLeaveRequestRepository;
 import com.org.careerbuilder.service.TeacherSelfAttendanceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.PathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -130,10 +139,19 @@ public class TeacherSelfAttendanceServiceImpl implements TeacherSelfAttendanceSe
 
     @Override
     @Transactional
-    public void applyLeave(Long facultyId, TeacherSelfAttendanceDtos.LeaveApplyRequest request) {
+    public void applyLeave(Long facultyId, TeacherSelfAttendanceDtos.LeaveApplyRequest request, MultipartFile document) {
         Faculty faculty = loadFaculty(facultyId);
         if (request.toDate().isBefore(request.fromDate())) {
             throw new IllegalArgumentException("toDate must be on or after fromDate");
+        }
+        Faculty substitute = null;
+        if (request.substituteFacultyId() != null) {
+            substitute = facultyRepository.findByIdAndSchool_IdWithDetails(
+                            request.substituteFacultyId(), faculty.getSchool().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Substitute teacher not found"));
+            if (substitute.getId().equals(facultyId)) {
+                throw new IllegalArgumentException("Cannot select yourself as substitute");
+            }
         }
         TeacherLeaveRequest leave = TeacherLeaveRequest.builder()
                 .faculty(faculty)
@@ -143,8 +161,117 @@ public class TeacherSelfAttendanceServiceImpl implements TeacherSelfAttendanceSe
                 .toDate(request.toDate())
                 .reason(request.reason().trim())
                 .status(TeacherLeaveStatus.APPLIED)
+                .substituteFaculty(substitute)
                 .build();
+        if (document != null && !document.isEmpty()) {
+            leave.setDocumentPath(storeLeaveDocument(facultyId, document));
+            leave.setDocumentOriginalName(document.getOriginalFilename());
+            leave.setDocumentContentType(document.getContentType());
+        }
         teacherLeaveRequestRepository.save(leave);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<TeacherSelfAttendanceDtos.SubstituteTeacherOption> listSubstituteTeachers(Long facultyId) {
+        Faculty faculty = loadFaculty(facultyId);
+        return facultyRepository.findColleaguesBySchoolExcluding(faculty.getSchool().getId(), facultyId).stream()
+                .map(f -> new TeacherSelfAttendanceDtos.SubstituteTeacherOption(
+                        f.getId(),
+                        (f.getFirstName() + " " + f.getLastName()).trim()))
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Resource downloadLeaveDocument(Long facultyId, Long leaveId) {
+        TeacherLeaveRequest leave = teacherLeaveRequestRepository.findById(leaveId)
+                .orElseThrow(() -> new ResourceNotFoundException("Teacher leave request not found"));
+        if (!leave.getFaculty().getId().equals(facultyId)) {
+            throw new ResourceNotFoundException("Teacher leave request not found");
+        }
+        if (leave.getDocumentPath() == null || leave.getDocumentPath().isBlank()) {
+            throw new ResourceNotFoundException("No document attached to this leave request");
+        }
+        Path path = Paths.get(leave.getDocumentPath());
+        PathResource resource = new PathResource(path);
+        if (!resource.exists()) {
+            throw new ResourceNotFoundException("Document file not found on server");
+        }
+        String filename = leave.getDocumentOriginalName() != null ? leave.getDocumentOriginalName() : "leave_document";
+        return new PathResource(path) {
+            @Override
+            public String getFilename() {
+                return filename;
+            }
+        };
+    }
+
+    private String storeLeaveDocument(Long facultyId, MultipartFile file) {
+        try {
+            Path dir = Paths.get("uploads", "teacher-leave-documents", String.valueOf(facultyId));
+            Files.createDirectories(dir);
+            String original = file.getOriginalFilename() != null ? file.getOriginalFilename() : "document";
+            String safe = original.replaceAll("[^a-zA-Z0-9._-]", "_");
+            Path target = dir.resolve(UUID.randomUUID() + "_" + safe);
+            Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
+            return target.toString().replace("\\", "/");
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to store leave document", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<TeacherSelfAttendanceDtos.AttendanceHistoryRow> getAttendanceHistory(
+            Long facultyId, LocalDate fromDate, LocalDate toDate, String statusFilter) {
+        loadFaculty(facultyId);
+        LocalDate to = toDate != null ? toDate : LocalDate.now();
+        LocalDate from = fromDate != null ? fromDate : to.minusDays(60);
+        if (from.isAfter(to)) {
+            throw new IllegalArgumentException("fromDate must be on or before toDate");
+        }
+
+        Map<LocalDate, TeacherAttendanceEntry> entriesByDate = new HashMap<>();
+        for (TeacherAttendanceEntry e : teacherAttendanceEntryRepository
+                .findByFaculty_IdAndWorkDateBetweenOrderByWorkDateAsc(facultyId, from, to)) {
+            entriesByDate.put(e.getWorkDate(), e);
+        }
+
+        String normalizedStatus = statusFilter == null || statusFilter.isBlank()
+                ? null
+                : statusFilter.trim().toUpperCase(Locale.ROOT);
+
+        List<TeacherSelfAttendanceDtos.AttendanceHistoryRow> rows = new ArrayList<>();
+        for (LocalDate day = from; !day.isAfter(to); day = day.plusDays(1)) {
+            TeacherAttendanceEntry entry = entriesByDate.get(day);
+            String status;
+            if (entry != null) {
+                status = entry.getStatus().name();
+            } else if (hasLeaveForDate(facultyId, day)) {
+                status = "LEAVE";
+            } else {
+                status = "--";
+            }
+            if (normalizedStatus != null && !normalizedStatus.equals("ALL") && !status.equals(normalizedStatus)) {
+                continue;
+            }
+            String dayLabel = day.getDayOfWeek().name().substring(0, 1)
+                    + day.getDayOfWeek().name().substring(1, 3).toLowerCase(Locale.ROOT)
+                    + ", " + day.getDayOfMonth() + " "
+                    + day.getMonth().name().substring(0, 1)
+                    + day.getMonth().name().substring(1, 3).toLowerCase(Locale.ROOT);
+            rows.add(new TeacherSelfAttendanceDtos.AttendanceHistoryRow(
+                    day,
+                    dayLabel,
+                    entry != null ? fmt(entry.getCheckInTime()) : "--",
+                    entry != null ? fmt(entry.getCheckOutTime()) : "--",
+                    entry != null ? minutesLabel(entry.getWorkedMinutes()) : "--",
+                    status
+            ));
+        }
+        rows.sort(Comparator.comparing(TeacherSelfAttendanceDtos.AttendanceHistoryRow::date).reversed());
+        return rows;
     }
 
     @Override
@@ -249,6 +376,20 @@ public class TeacherSelfAttendanceServiceImpl implements TeacherSelfAttendanceSe
 
     private TeacherSelfAttendanceDtos.LeaveHistoryItem toLeaveHistoryItem(TeacherLeaveRequest leave) {
         int totalDays = (int) ChronoUnit.DAYS.between(leave.getFromDate(), leave.getToDate()) + 1;
+        boolean hasDocument = leave.getDocumentPath() != null && !leave.getDocumentPath().isBlank();
+        Long documentSizeBytes = null;
+        if (hasDocument) {
+            try {
+                documentSizeBytes = Files.size(Paths.get(leave.getDocumentPath()));
+            } catch (IOException ignored) {
+                // size unavailable if file missing
+            }
+        }
+        String substituteName = null;
+        if (leave.getSubstituteFaculty() != null) {
+            Faculty sub = leave.getSubstituteFaculty();
+            substituteName = (sub.getFirstName() + " " + sub.getLastName()).trim();
+        }
         return new TeacherSelfAttendanceDtos.LeaveHistoryItem(
                 leave.getId(),
                 leave.getLeaveType().name(),
@@ -259,7 +400,12 @@ public class TeacherSelfAttendanceServiceImpl implements TeacherSelfAttendanceSe
                 leave.getRejectionReason(),
                 leave.getStatus().name(),
                 leave.getCreatedAt(),
-                leave.getUpdatedAt()
+                leave.getUpdatedAt(),
+                hasDocument,
+                leave.getDocumentOriginalName(),
+                leave.getDocumentContentType(),
+                documentSizeBytes,
+                substituteName
         );
     }
 

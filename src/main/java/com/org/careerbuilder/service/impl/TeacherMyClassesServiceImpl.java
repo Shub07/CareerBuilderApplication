@@ -551,6 +551,8 @@ public class TeacherMyClassesServiceImpl implements TeacherMyClassesService {
     private TeacherMyClassesDtos.ClassSessionCard buildCardFromSlot(Faculty faculty, ClassScheduleSlot slot, TeacherScheduleDtos.ScheduleItemResponse item, LocalDate d) {
         String last = lastTopic(faculty.getId(), item.className(), item.section(), slot.getSubject().getId(), d, slot.getStartTime());
         SessionStatusModel st = computeCardStatus(faculty.getSchool().getId(), item.className(), item.section(), d, item.startTime(), item.endTime());
+        int studentCount = (int) studentRepository.countBySchool_IdAndClassNameAndSection(
+                faculty.getSchool().getId(), item.className(), item.section());
         return new TeacherMyClassesDtos.ClassSessionCard(
                 KIND_TIMETABLE_SLOT,
                 slot.getId(),
@@ -568,7 +570,8 @@ public class TeacherMyClassesServiceImpl implements TeacherMyClassesService {
                 st.attendancePending(),
                 false,
                 null,
-                item.source()
+                item.source(),
+                studentCount
         );
     }
 
@@ -582,6 +585,8 @@ public class TeacherMyClassesServiceImpl implements TeacherMyClassesService {
         boolean extra = !entry.isRecurring() && entry.getSpecificDate() != null && entry.getActivityType() == TeacherActivityType.CLASS;
         String subLabel = substituteLabel(entry.getSubstituteForName());
         SessionStatusModel st = computeCardStatus(faculty.getSchool().getId(), entry.getClassName(), entry.getSection(), d, item.startTime(), item.endTime());
+        int studentCount = (int) studentRepository.countBySchool_IdAndClassNameAndSection(
+                faculty.getSchool().getId(), entry.getClassName(), entry.getSection());
         return new TeacherMyClassesDtos.ClassSessionCard(
                 KIND_TEACHER_ENTRY,
                 entry.getId(),
@@ -599,7 +604,8 @@ public class TeacherMyClassesServiceImpl implements TeacherMyClassesService {
                 st.attendancePending(),
                 extra,
                 subLabel,
-                item.source()
+                item.source(),
+                studentCount
         );
     }
 

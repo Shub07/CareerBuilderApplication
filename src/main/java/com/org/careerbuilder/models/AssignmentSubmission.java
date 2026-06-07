@@ -39,6 +39,18 @@ public class AssignmentSubmission {
 
     private LocalDateTime submittedAt;
 
+    @Column(name = "letter_grade", length = 5)
+    private String letterGrade;
+
+    @Column(name = "points_obtained")
+    private Integer pointsObtained;
+
+    @Column(name = "points_total")
+    private Integer pointsTotal;
+
+    @Column(name = "teacher_remarks", columnDefinition = "TEXT")
+    private String teacherRemarks;
+
     // Explicit getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -60,4 +72,16 @@ public class AssignmentSubmission {
     
     public LocalDateTime getSubmittedAt() { return submittedAt; }
     public void setSubmittedAt(LocalDateTime submittedAt) { this.submittedAt = submittedAt; }
+
+    public String getLetterGrade() { return letterGrade; }
+    public void setLetterGrade(String letterGrade) { this.letterGrade = letterGrade; }
+
+    public Integer getPointsObtained() { return pointsObtained; }
+    public void setPointsObtained(Integer pointsObtained) { this.pointsObtained = pointsObtained; }
+
+    public Integer getPointsTotal() { return pointsTotal; }
+    public void setPointsTotal(Integer pointsTotal) { this.pointsTotal = pointsTotal; }
+
+    public String getTeacherRemarks() { return teacherRemarks; }
+    public void setTeacherRemarks(String teacherRemarks) { this.teacherRemarks = teacherRemarks; }
 }

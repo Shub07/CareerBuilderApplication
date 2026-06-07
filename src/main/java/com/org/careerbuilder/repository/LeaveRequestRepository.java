@@ -35,4 +35,13 @@ public interface LeaveRequestRepository extends JpaRepository<LeaveRequest, Long
 
     @Query("SELECT lr FROM LeaveRequest lr WHERE lr.student.id = :studentId AND lr.toDate < CURRENT_DATE ORDER BY lr.toDate DESC")
     List<LeaveRequest> findPastLeaveRequests(@Param("studentId") Long studentId, Pageable pageable);
+
+    @Query("""
+            SELECT lr FROM LeaveRequest lr
+            WHERE lr.student.school.id = :schoolId AND lr.status = :status
+            ORDER BY lr.createdAt DESC
+            """)
+    List<LeaveRequest> findBySchoolIdAndStatus(@Param("schoolId") Long schoolId, @Param("status") LeaveStatus status);
+
+    long countByStudent_School_IdAndStatus(Long schoolId, LeaveStatus status);
 }

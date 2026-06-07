@@ -5,10 +5,12 @@ import com.org.careerbuilder.dto.request.RegisterRequest;
 import com.org.careerbuilder.dto.response.AuthResponse;
 import com.org.careerbuilder.exceptions.ResourceNotFoundException;
 import com.org.careerbuilder.models.AppUser;
+import com.org.careerbuilder.models.Faculty;
 import com.org.careerbuilder.models.School;
 import com.org.careerbuilder.models.Student;
 import com.org.careerbuilder.models.enums.UserRole;
 import com.org.careerbuilder.repository.AppUserRepository;
+import com.org.careerbuilder.repository.FacultyRepository;
 import com.org.careerbuilder.repository.SchoolRepository;
 import com.org.careerbuilder.repository.StudentRepository;
 import com.org.careerbuilder.security.JwtService;
@@ -17,6 +19,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +31,7 @@ public class AuthServiceImpl implements AuthService {
     private final AppUserRepository appUserRepository;
     private final StudentRepository studentRepository;
     private final SchoolRepository schoolRepository;
+    private final FacultyRepository facultyRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
@@ -51,6 +56,8 @@ public class AuthServiceImpl implements AuthService {
         UserRole role = parseRole(request.role());
 
         Student linkedStudent = resolveLinkedStudent(request, role, email, mobile);
+        School adminSchool = resolveSchoolForAdmin(request, role);
+        resolveFacultyForTeacherRegistration(request, role, email, mobile);
 
         AppUser user = AppUser.builder()
                 .email(email)
@@ -58,6 +65,7 @@ public class AuthServiceImpl implements AuthService {
                 .passwordHash(passwordEncoder.encode(request.password()))
                 .role(role)
                 .student(linkedStudent)
+                .school(adminSchool)
                 .active(true)
                 .build();
 
@@ -77,6 +85,8 @@ public class AuthServiceImpl implements AuthService {
                 "Bearer",
                 saved.getId(),
                 saved.getStudent() != null ? saved.getStudent().getId() : null,
+                resolveFacultyId(saved),
+                resolveSchoolId(saved),
                 saved.getRole().name(),
                 saved.getEmail(),
                 saved.getMobile(),
@@ -113,6 +123,8 @@ public class AuthServiceImpl implements AuthService {
                 "Bearer",
                 user.getId(),
                 user.getStudent() != null ? user.getStudent().getId() : null,
+                resolveFacultyId(user),
+                resolveSchoolId(user),
                 user.getRole().name(),
                 user.getEmail(),
                 user.getMobile(),
@@ -130,9 +142,92 @@ public class AuthServiceImpl implements AuthService {
         return switch (normalized) {
             case "STUDENT" -> UserRole.STUDENT;
             case "PARENT" -> UserRole.PARENT;
-            case "SCHOOL_ADMIN", "ADMIN" -> UserRole.SCHOOL_ADMIN;
-            default -> throw new IllegalArgumentException("Invalid role. Allowed: STUDENT, PARENT, SCHOOL_ADMIN");
+            case "SCHOOL_ADMIN" -> UserRole.SCHOOL_ADMIN;
+            case "TEACHER" -> UserRole.TEACHER;
+            case "ADMIN" -> UserRole.ADMIN;
+            default -> throw new IllegalArgumentException(
+                    "Invalid role. Allowed: STUDENT, PARENT, TEACHER, SCHOOL_ADMIN, ADMIN");
         };
+    }
+
+    /**
+     * Maps TEACHER login to faculty PK via matching email or mobile on the faculty record.
+     */
+    private Long resolveFacultyId(AppUser user) {
+        if (user.getRole() != UserRole.TEACHER) {
+            return null;
+        }
+        if (user.getEmail() != null && !user.getEmail().isBlank()) {
+            Optional<Faculty> byEmail = facultyRepository.findFirstByEmailIgnoreCase(user.getEmail().trim());
+            if (byEmail.isPresent()) {
+                return byEmail.get().getId();
+            }
+        }
+        if (user.getMobile() != null && !user.getMobile().isBlank()) {
+            return facultyRepository.findFirstByPhone(user.getMobile().trim())
+                    .map(Faculty::getId)
+                    .orElse(null);
+        }
+        return null;
+    }
+
+    private School resolveSchoolForAdmin(RegisterRequest request, UserRole role) {
+        if (role != UserRole.SCHOOL_ADMIN && role != UserRole.ADMIN) {
+            return null;
+        }
+        if (request.schoolId() == null) {
+            throw new IllegalArgumentException("schoolId is required for admin registration.");
+        }
+        return schoolRepository.findById(request.schoolId())
+                .orElseThrow(() -> new ResourceNotFoundException("School not found with id: " + request.schoolId()));
+    }
+
+    /**
+     * Teacher self-registration must match an existing faculty row for the selected school
+     * (created by school admin). Login is linked via matching email or mobile on faculty.
+     */
+    private Faculty resolveFacultyForTeacherRegistration(
+            RegisterRequest request, UserRole role, String email, String mobile) {
+        if (role != UserRole.TEACHER) {
+            return null;
+        }
+        if (request.schoolId() == null) {
+            throw new IllegalArgumentException("schoolId is required for teacher registration.");
+        }
+        Long schoolId = request.schoolId();
+        if (!schoolRepository.existsById(schoolId)) {
+            throw new ResourceNotFoundException("School not found with id: " + schoolId);
+        }
+
+        Faculty faculty = null;
+        if (email != null) {
+            faculty = facultyRepository.findFirstByEmailIgnoreCaseAndSchool_Id(email, schoolId).orElse(null);
+        }
+        if (faculty == null && mobile != null) {
+            faculty = facultyRepository.findFirstByPhoneAndSchool_Id(mobile, schoolId).orElse(null);
+        }
+        if (faculty == null) {
+            throw new IllegalArgumentException(
+                    "No faculty profile found for this school with your email or mobile. "
+                            + "Ask your school admin to add you as a teacher first, then register using the same contact details.");
+        }
+        return faculty;
+    }
+
+    private Long resolveSchoolId(AppUser user) {
+        if (user.getSchool() != null) {
+            return user.getSchool().getId();
+        }
+        if (user.getStudent() != null && user.getStudent().getSchool() != null) {
+            return user.getStudent().getSchool().getId();
+        }
+        Long facultyId = resolveFacultyId(user);
+        if (facultyId != null) {
+            return facultyRepository.findById(facultyId)
+                    .map(f -> f.getSchool() != null ? f.getSchool().getId() : null)
+                    .orElse(null);
+        }
+        return null;
     }
 
     private String normalizeEmail(String email) {

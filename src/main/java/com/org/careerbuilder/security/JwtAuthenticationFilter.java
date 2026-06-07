@@ -42,7 +42,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
 
+            Long userId = claims.get("userId", Long.class);
             Long studentId = claims.get("studentId", Long.class);
+            Long schoolId = claims.get("schoolId", Long.class);
             String username = claims.getSubject();
             String role = claims.get("role", String.class); // e.g. "STUDENT"
 
@@ -56,7 +58,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .map(r -> new SimpleGrantedAuthority("ROLE_" + r))
                     .collect(Collectors.toSet());
 
-            UserPrincipal principal = new UserPrincipal(studentId, username, roles);
+            UserPrincipal principal = new UserPrincipal(userId, studentId, schoolId, username, roles);
 
             var auth = new UsernamePasswordAuthenticationToken(
                     principal,

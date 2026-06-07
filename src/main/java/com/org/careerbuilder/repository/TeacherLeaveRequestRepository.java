@@ -8,8 +8,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface TeacherLeaveRequestRepository extends JpaRepository<TeacherLeaveRequest, Long> {
+
+    Optional<TeacherLeaveRequest> findByIdAndFaculty_Id(Long id, Long facultyId);
+
     List<TeacherLeaveRequest> findByFaculty_IdAndStatusInAndFromDateLessThanEqualAndToDateGreaterThanEqual(
             Long facultyId, Collection<TeacherLeaveStatus> statuses, LocalDate date1, LocalDate date2);
 

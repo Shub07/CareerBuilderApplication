@@ -47,6 +47,10 @@ public class TeacherQuizServiceImpl implements TeacherQuizService {
         Map<String, TeacherQuizDtos.ClassSectionOption> classes = new LinkedHashMap<>();
         Map<Long, TeacherQuizDtos.SubjectOption> subjects = new LinkedHashMap<>();
         for (ClassSubjectTeacher cst : csts) {
+            if (cst.getClassName() == null || cst.getClassName().isBlank()
+                    || cst.getSection() == null || cst.getSection().isBlank()) {
+                continue;
+            }
             String key = cst.getClassName().toLowerCase(Locale.ROOT) + "|" + cst.getSection().toLowerCase(Locale.ROOT);
             classes.putIfAbsent(key, new TeacherQuizDtos.ClassSectionOption(
                     cst.getClassName(), cst.getSection(),
@@ -112,12 +116,14 @@ public class TeacherQuizServiceImpl implements TeacherQuizService {
             int attempts = (int) quizSubmissionRepository.countByQuiz_IdAndSubmittedAtIsNotNull(qz.getId());
             Double avg = quizSubmissionRepository.averageTotalScore(qz.getId(), QuizSubmissionGradeStatus.CHECKED)
                     .orElse(null);
+            QuizLifecycleStatus lc = qz.getLifecycleStatus();
+            String lifecycleName = lc != null ? lc.name() : QuizLifecycleStatus.DRAFT.name();
             rows.add(new TeacherQuizDtos.QuizCardRow(
                     qz.getId(),
                     qz.getTitle(),
                     safeSubjectName(qz),
                     classLabel(qz),
-                    qz.getLifecycleStatus().name(),
+                    lifecycleName,
                     qCount,
                     qz.getTimeLimitMinutes(),
                     attempts,

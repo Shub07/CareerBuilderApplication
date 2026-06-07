@@ -1,6 +1,7 @@
 package com.org.careerbuilder.repository;
 
 import com.org.careerbuilder.models.ExamResult;
+import com.org.careerbuilder.models.enums.ExamType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
@@ -95,4 +96,99 @@ public interface ExamResultRepository extends JpaRepository<ExamResult, Long> {
              WHERE er2.id = :examResultId)
     """)
     Long getStudentRank(@Param("examResultId") Long examResultId, @Param("examId") Long examId);
+
+    @Query("""
+            SELECT er FROM ExamResult er
+            JOIN FETCH er.exam e
+            JOIN FETCH er.student st
+            JOIN FETCH e.subject sub
+            WHERE er.exam.id = :examId
+            ORDER BY st.rollNo ASC
+            """)
+    List<ExamResult> findWithContextByExamId(@Param("examId") Long examId);
+
+    @Query("""
+            SELECT er FROM ExamResult er
+            JOIN FETCH er.exam e
+            JOIN FETCH er.student st
+            JOIN FETCH e.subject sub
+            WHERE st.school.id = :schoolId
+            AND e.subject.id = :subjectId
+            AND (:className IS NULL OR st.className = :className)
+            AND (:section IS NULL OR st.section = :section)
+            AND (:examType IS NULL OR e.examType = :examType)
+            """)
+    List<ExamResult> findTeacherExamResults(
+            @Param("schoolId") Long schoolId,
+            @Param("subjectId") Long subjectId,
+            @Param("className") String className,
+            @Param("section") String section,
+            @Param("examType") ExamType examType);
+
+    @Query("""
+            SELECT er FROM ExamResult er
+            JOIN FETCH er.exam e
+            JOIN FETCH er.student st
+            JOIN FETCH e.subject sub
+            WHERE st.school.id = :schoolId
+            AND e.subject.id = :subjectId
+            AND er.marksLocked = true
+            AND (:className IS NULL OR st.className = :className)
+            AND (:section IS NULL OR st.section = :section)
+            """)
+    List<ExamResult> findLockedTeacherExamResults(
+            @Param("schoolId") Long schoolId,
+            @Param("subjectId") Long subjectId,
+            @Param("className") String className,
+            @Param("section") String section);
+
+    @Query("""
+            SELECT er FROM ExamResult er
+            JOIN FETCH er.exam e
+            JOIN FETCH er.student st
+            JOIN FETCH er.subject sub
+            WHERE st.school.id = :schoolId
+            AND st.className = :className
+            AND st.section = :section
+            AND (:subjectId IS NULL OR sub.id = :subjectId)
+            AND (:examId IS NULL OR e.id = :examId)
+            """)
+    List<ExamResult> findCohortResults(
+            @Param("schoolId") Long schoolId,
+            @Param("className") String className,
+            @Param("section") String section,
+            @Param("subjectId") Long subjectId,
+            @Param("examId") Long examId);
+
+    @Query("""
+            SELECT er FROM ExamResult er
+            JOIN FETCH er.exam e
+            JOIN FETCH er.student st
+            JOIN FETCH er.subject sub
+            WHERE st.id = :studentId
+            AND (:subjectId IS NULL OR sub.id = :subjectId)
+            AND (:examId IS NULL OR e.id = :examId)
+            ORDER BY e.examDate DESC
+            """)
+    List<ExamResult> findStudentResultsFiltered(
+            @Param("studentId") Long studentId,
+            @Param("subjectId") Long subjectId,
+            @Param("examId") Long examId);
+
+    @Query("""
+            SELECT er FROM ExamResult er
+            JOIN FETCH er.student st
+            JOIN FETCH er.subject sub
+            WHERE er.exam.id = :examId AND er.subject.id = :subjectId
+            ORDER BY st.rollNo ASC
+            """)
+    List<ExamResult> findByExamIdAndSubjectId(
+            @Param("examId") Long examId,
+            @Param("subjectId") Long subjectId);
+
+    long countByExam_IdAndSubject_Id(Long examId, Long subjectId);
+
+    long countByExam_IdAndSubject_IdAndObtainedMarksIsNotNull(Long examId, Long subjectId);
+
+    long countByExam_IdAndSubject_IdAndMarksLockedTrue(Long examId, Long subjectId);
 }

@@ -10,7 +10,8 @@
 --     exam_type VARCHAR(50) NOT NULL,
 --     subject_id BIGINT NOT NULL,
 --     start_time TIME,
---     duration_minutes INTEGER
+--     duration_minutes INTEGER,
+--     venue VARCHAR(200)   -- room / hall (PostgreSQL: see db/migration/V1002__exams_add_venue.sql)
 -- );
 
 -- ============================================================================

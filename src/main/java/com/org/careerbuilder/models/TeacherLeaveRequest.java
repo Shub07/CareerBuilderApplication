@@ -52,6 +52,19 @@ public class TeacherLeaveRequest {
     @Column(name = "status", nullable = false, length = 20)
     private TeacherLeaveStatus status;
 
+    @Column(name = "document_path", length = 500)
+    private String documentPath;
+
+    @Column(name = "document_original_name", length = 255)
+    private String documentOriginalName;
+
+    @Column(name = "document_content_type", length = 120)
+    private String documentContentType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "substitute_faculty_id")
+    private Faculty substituteFaculty;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

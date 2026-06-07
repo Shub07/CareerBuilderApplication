@@ -20,7 +20,8 @@ public final class TeacherSelfAttendanceDtos {
             @NotNull TeacherLeaveType leaveType,
             @NotNull LocalDate fromDate,
             @NotNull LocalDate toDate,
-            @NotBlank String reason
+            @NotBlank String reason,
+            Long substituteFacultyId
     ) {}
 
     public record LeaveActionRequest(
@@ -52,6 +53,16 @@ public final class TeacherSelfAttendanceDtos {
             String status
     ) {}
 
+    /** Full attendance log row for history screen and export. */
+    public record AttendanceHistoryRow(
+            LocalDate date,
+            String dateLabel,
+            String checkInTime,
+            String checkOutTime,
+            String workingHours,
+            String status
+    ) {}
+
     public record LeaveBalanceCard(
             Bucket casual,
             Bucket medical,
@@ -68,8 +79,15 @@ public final class TeacherSelfAttendanceDtos {
             String rejectionReason,
             String status,
             LocalDateTime createdAt,
-            LocalDateTime updatedAt
+            LocalDateTime updatedAt,
+            boolean hasDocument,
+            String documentFileName,
+            String documentContentType,
+            Long documentSizeBytes,
+            String substituteName
     ) {}
+
+    public record SubstituteTeacherOption(Long facultyId, String displayName) {}
 
     public record AdminLeaveItem(
             Long leaveId,

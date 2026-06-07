@@ -22,7 +22,7 @@ public interface QuizSubmissionRepository extends JpaRepository<QuizSubmission, 
     long countByQuiz_IdAndSubmittedAtIsNotNullAndGradeStatus(Long quizId, QuizSubmissionGradeStatus gradeStatus);
 
     @Query("""
-            select avg(s.totalScore) from QuizSubmission s
+            select avg(cast(s.totalScore as double)) from QuizSubmission s
             where s.quiz.id = :quizId
             and s.gradeStatus = :gs
             and s.totalScore is not null

@@ -29,15 +29,28 @@ public class JwtService {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + expirationMs);
 
+        Long schoolId = resolveSchoolId(user);
+
         return Jwts.builder()
                 .setSubject(user.getEmail() != null ? user.getEmail() : user.getMobile())
                 .claim("userId", user.getId())
                 .claim("studentId", user.getStudent() != null ? user.getStudent().getId() : null)
+                .claim("schoolId", schoolId)
                 .claim("role", user.getRole().name())
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .signWith(key)
                 .compact();
+    }
+
+    private Long resolveSchoolId(AppUser user) {
+        if (user.getSchool() != null) {
+            return user.getSchool().getId();
+        }
+        if (user.getStudent() != null && user.getStudent().getSchool() != null) {
+            return user.getStudent().getSchool().getId();
+        }
+        return null;
     }
 
     public Claims parseAndValidate(String token) {

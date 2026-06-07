@@ -41,9 +41,13 @@ public class TeacherLessonPlanServiceImpl implements TeacherLessonPlanService {
         Map<Long, LessonPlanDtos.SubjectOption> subjects = new LinkedHashMap<>();
         for (ClassSubjectTeacher cst : csts) {
             String key = cst.getClassName().toLowerCase(Locale.ROOT) + "|" + cst.getSection().toLowerCase(Locale.ROOT);
-            classes.putIfAbsent(key, new LessonPlanDtos.ClassSectionOption(
-                    cst.getClassName(), cst.getSection(),
-                    helper.classLabel(cst.getClassName(), cst.getSection())));
+            if (cst.getSubject() != null) {
+                classes.putIfAbsent(key, new LessonPlanDtos.ClassSectionOption(
+                        cst.getClassName(), cst.getSection(),
+                        helper.classLabel(cst.getClassName(), cst.getSection()),
+                        cst.getSubject().getId(),
+                        cst.getSubject().getName()));
+            }
             if (cst.getSubject() != null) {
                 subjects.putIfAbsent(cst.getSubject().getId(),
                         new LessonPlanDtos.SubjectOption(cst.getSubject().getId(), cst.getSubject().getName()));

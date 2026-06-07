@@ -29,7 +29,8 @@ public final class TeacherMyClassesDtos {
             boolean attendancePending,
             boolean extraSession,
             String substituteForDisplay,
-            String source
+            String source,
+            int studentCount
     ) {
     }
 

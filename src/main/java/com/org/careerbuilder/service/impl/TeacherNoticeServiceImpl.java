@@ -68,7 +68,7 @@ public class TeacherNoticeServiceImpl implements TeacherNoticeService {
             uniqueClasses.putIfAbsent(key, new TeacherNoticeDtos.ClassOption(
                     cst.getClassName(),
                     cst.getSection(),
-                    cst.getClassName() + " " + cst.getSection()
+                    "Grade " + cst.getClassName() + " " + cst.getSection()
             ));
         }
 
@@ -494,8 +494,19 @@ public class TeacherNoticeServiceImpl implements TeacherNoticeService {
         List<TeacherNoticeStudentTarget> studentTargets = teacherNoticeStudentTargetRepository.findByTeacherNotice_Id(notice.getId());
 
         String sentTo = notice.getNoticeType() == TeacherNoticeType.CLASS_ANNOUNCEMENT
-                ? classTargets.stream().map(t -> t.getClassName() + " " + t.getSection()).distinct().collect(Collectors.joining(", "))
+                ? classTargets.stream()
+                        .map(t -> "Grade " + t.getClassName() + " " + t.getSection())
+                        .distinct()
+                        .collect(Collectors.joining(", "))
                 : studentTargets.size() + " Students";
+
+        List<TeacherNoticeDtos.ClassTargetRef> classRefs = classTargets.stream()
+                .map(t -> new TeacherNoticeDtos.ClassTargetRef(t.getClassName(), t.getSection()))
+                .distinct()
+                .toList();
+        List<Long> studentIds = studentTargets.stream()
+                .map(t -> t.getStudent().getId())
+                .toList();
 
         return new TeacherNoticeDtos.TeacherNoticeResponse(
                 notice.getId(),
@@ -504,7 +515,13 @@ public class TeacherNoticeServiceImpl implements TeacherNoticeService {
                 notice.getTitle(),
                 notice.getDescription(),
                 sentTo,
-                studentTargets.size(),
+                studentTargets.isEmpty() && notice.getNoticeType() == TeacherNoticeType.STUDENT_ALERT
+                        ? 0
+                        : (notice.getNoticeType() == TeacherNoticeType.CLASS_ANNOUNCEMENT
+                                ? classTargets.size()
+                                : studentTargets.size()),
+                classRefs,
+                studentIds,
                 notice.getAttachmentUrl(),
                 notice.getAttachmentFileName(),
                 notice.getAttachmentFileType(),

@@ -7,6 +7,8 @@ public final class TeacherNoticeDtos {
 
     private TeacherNoticeDtos() {}
 
+    public record ClassTargetRef(String className, String section) {}
+
     public record TeacherNoticeResponse(
             Long id,
             String noticeType,
@@ -15,6 +17,8 @@ public final class TeacherNoticeDtos {
             String description,
             String sentToLabel,
             int recipientCount,
+            List<ClassTargetRef> classTargets,
+            List<Long> studentIds,
             String attachmentUrl,
             String attachmentFileName,
             String attachmentFileType,

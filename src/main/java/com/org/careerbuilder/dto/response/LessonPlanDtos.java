@@ -9,7 +9,7 @@ public final class LessonPlanDtos {
     private LessonPlanDtos() {
     }
 
-    public record ClassSectionOption(String className, String section, String label) {
+    public record ClassSectionOption(String className, String section, String label, Long subjectId, String subjectName) {
     }
 
     public record SubjectOption(Long subjectId, String subjectName) {

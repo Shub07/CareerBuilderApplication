@@ -1,7 +1,10 @@
 package com.org.careerbuilder.models;
 
+import com.org.careerbuilder.models.enums.ClassAssignmentRole;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(
@@ -37,4 +40,12 @@ public class ClassSubjectTeacher {
 
     @Column(name="is_active", nullable=false)
     private boolean active = true;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="role", length=30)
+    @Builder.Default
+    private ClassAssignmentRole role = ClassAssignmentRole.SUBJECT_TEACHER;
+
+    @Column(name="assigned_date")
+    private LocalDate assignedDate;
 }

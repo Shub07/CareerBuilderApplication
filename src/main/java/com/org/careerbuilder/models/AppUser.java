@@ -83,6 +83,13 @@ public class AppUser {
     private Student student;
 
     /**
+     * Tenant school for SCHOOL_ADMIN / ADMIN roles.
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "school_id", referencedColumnName = "id")
+    private School school;
+
+    /**
      * Indicates whether the account is active.
      */
     @Column(name = "is_active", nullable = false)

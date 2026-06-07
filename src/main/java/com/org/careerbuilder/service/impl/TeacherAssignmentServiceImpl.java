@@ -51,6 +51,10 @@ public class TeacherAssignmentServiceImpl implements TeacherAssignmentService {
         Map<String, TeacherAssignmentDtos.ClassSectionOption> classes = new LinkedHashMap<>();
         Map<Long, TeacherAssignmentDtos.SubjectOption> subjects = new LinkedHashMap<>();
         for (ClassSubjectTeacher cst : csts) {
+            if (cst.getClassName() == null || cst.getClassName().isBlank()
+                    || cst.getSection() == null || cst.getSection().isBlank()) {
+                continue;
+            }
             String key = cst.getClassName().toLowerCase(Locale.ROOT) + "|" + cst.getSection().toLowerCase(Locale.ROOT);
             classes.putIfAbsent(key, new TeacherAssignmentDtos.ClassSectionOption(
                     cst.getClassName(), cst.getSection(), "Grade " + cst.getClassName() + " " + cst.getSection()));
@@ -122,6 +126,7 @@ public class TeacherAssignmentServiceImpl implements TeacherAssignmentService {
             int total = totalStudents(a);
             int submitted = (int) submissionRepository.countSubmittedWithFile(a.getId());
             String display = computeDisplayStatusInst(a, submitted, total);
+            String publish = a.getPublishStatus() != null ? a.getPublishStatus().name() : "PUBLISHED";
             rows.add(new TeacherAssignmentDtos.AssignmentListRow(
                     a.getId(),
                     a.getTitle(),
@@ -132,7 +137,7 @@ public class TeacherAssignmentServiceImpl implements TeacherAssignmentService {
                     submitted,
                     total,
                     display,
-                    a.getPublishStatus().name()
+                    publish
             ));
         }
         return new TeacherAssignmentDtos.AssignmentListPage(rows, page.getTotalPages(), page.getTotalElements());
@@ -537,14 +542,16 @@ public class TeacherAssignmentServiceImpl implements TeacherAssignmentService {
     }
 
     private String computeDisplayStatusInst(Assignment a, int submitted, int total) {
-        if (a.getPublishStatus() == AssignmentPublishStatus.DRAFT) {
+        AssignmentPublishStatus ps = a.getPublishStatus();
+        if (ps == AssignmentPublishStatus.DRAFT) {
             return "DRAFT";
         }
-        if (a.getPublishStatus() == AssignmentPublishStatus.CLOSED) {
+        if (ps == AssignmentPublishStatus.CLOSED) {
             return "CLOSED";
         }
         LocalDate today = LocalDate.now();
-        if (a.getDueDate().equals(today)) {
+        LocalDate due = a.getDueDate();
+        if (due != null && due.equals(today)) {
             return "DUE_TODAY";
         }
         if (submitted > 0) {
